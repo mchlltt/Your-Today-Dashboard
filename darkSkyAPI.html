@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Weather API</title>
+	
+	<!-- JQUERY CDN -->
+	<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+
+
+
+</head>
+
+
+
+
+ <body>
+    <h5>Powered by Dark Sky</h5>
+    <p id="weather">Weather Report:<p>
+	<div class="weatherReport">Next Hour: <span id="summary"></span></div>
+
+
+
+
+
+    <button onclick="b()">Get Weather</button>
+        <script>
+
+        function b(){
+
+
+        // HARD CODED TO RETURN CHICAGO AS LOCATION OF DATA
+            var apiKey = '0b3cbdf73e99584a55eddd1b6bd851f6';
+            var url = 'https://api.forecast.io/forecast/';
+            var lati = "41.8781";
+            var longi = "-87.6298";
+            var data;
+
+            //https://api.forecast.io/forecast/0b3cbdf73e99584a55eddd1b6bd851f6
+
+            $.getJSON(url + apiKey + "/" + lati + "," + longi + "?callback=?", function(data) {
+              console.log(data);
+              $('#weather').html('The temperature in Chicago: ' + data.currently.temperature + ' degrees');
+
+
+              $('#summary').html(data.currently.summary);
+
+               console.log("Summary ", data.currently.summary)
+
+            });
+
+           
+
+        }
+        </script>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    </body>
+</html>
+
