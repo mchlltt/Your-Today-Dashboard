@@ -11,7 +11,7 @@ $(document).ready(function () {
             var a = $('<h3>').html(data.articles[i].title);
             var b = $('<p>').html(data.articles[i].description);
             var c = $('<img src="' + data.articles[i].urlToImage + '"/>');
-            c.addClass('img-responsive rounded mx-auto');
+            c.addClass('img-responsive img-rounded mx-auto');
             d.append(a, b, c);
             $('.article').append(d);
         }
