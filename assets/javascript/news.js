@@ -7,7 +7,7 @@ $(document).ready(function() {
             var d = $('<div class="well col-md-4 col-sm-4 col-xs-4">');
             var a = $('<h3>').html(data.articles[i].title);
             var b = $('<p>').html(data.articles[i].description);
-            var c = $('<img src="' + data.articles[i].urlToImage + '" height="200px"/>').html(data.articles[i].title);
+            var c = $('<img src="' + data.articles[i].urlToImage.replace('http','https') + '" height="200px"/>').html(data.articles[i].title);
             d.append(a, b, c);
             $('.article').append(d);
         }
