@@ -82,7 +82,6 @@ $(document).ready(function() {
 
         // Clear form.
         $('#location').val('');
-        $('#username').val('');
 
         // Indicate success.
         $('#form-submit-message').text('Sucess!');
