@@ -10,6 +10,7 @@
     <!-- <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
     <script src="assets/javascript/user.js"></script>
     <script src="assets/javascript/news.js"></script>
+    <script src="assets/javascript/weather.js"></script>
 </head>
 
 <body>
@@ -34,6 +35,14 @@
     </div>
     <div class="container row">
         <div class="article col-md-12"></div>
+    </div>
+    <div class="container row">
+        <div class="col-xs-12">
+            <button id="weather-button" class="btn">Get Weather</button>
+            <h5>Powered by Dark Sky</h5>
+            <p id="weather">Weather Report:</p>
+            <div class="weatherReport">Next Hour: <span id="summary"></span></div>
+        </div>
     </div>
     <!--
     <div class="container row">
