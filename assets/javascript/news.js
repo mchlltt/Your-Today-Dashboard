@@ -10,7 +10,7 @@ $(document).ready(function () {
             var d = $('<div class="well col-md-4 col-sm-4 col-xs-4">');
             var a = $('<h3>').html(data.articles[i].title);
             var b = $('<p>').html(data.articles[i].description);
-            var e = $('<a href="' + data.articles[i].url + '">').html('Read more');
+            var e = $('<a href="' + data.articles[i].url + '" target="blank"/>').html('Read more');
             var c = $('<img src="' + data.articles[i].urlToImage + '"/>');
             c.addClass('img-responsive img-rounded mx-auto');
             d.append(a, b, e, c);
