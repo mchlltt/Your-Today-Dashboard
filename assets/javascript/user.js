@@ -10,11 +10,11 @@ $(document).ready(function() {
         // if (nameLocal.length > 0 && latLocal.length > 0 && longLocal.length > 0) {
         //     return false;
         // } else {
-            return true;
+        return true;
         // }
     };
 
-    // Determine during pageload whether to display the form.
+    // Determine whether to display the form.
     hideForm = function() {
         if (isUserInfoNeeded()) {
             $('form').show();
@@ -23,9 +23,8 @@ $(document).ready(function() {
         }
     };
 
-    // Run on pageload.
+    // Check on pageload.
     hideForm();
-
 
     // Initialize user variables.
     var name;
@@ -34,7 +33,13 @@ $(document).ready(function() {
     var long;
 
     // This variable indicates whether the address was input manually by the user and needs to be geocoded.
+    // It is true by default.
     var inputAddress = true;
+
+    // It is also true if the user has typed in the location box.
+    $('#location').on('keyup', function() {
+        inputAddress = true;
+    });
 
     // Get input from input boxes.
     $('#submit-button').on('click', function() {
@@ -54,7 +59,9 @@ $(document).ready(function() {
             var geocoder = new google.maps.Geocoder();
 
             // Geocode raw address input.
-            geocoder.geocode({ 'address': rawAddress }, function(results, status) {
+            geocoder.geocode({
+                'address': rawAddress
+            }, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     // Save latitude and longitude.
                     lat = results[0].geometry.location.lat();
@@ -107,15 +114,12 @@ $(document).ready(function() {
         $('#location').val(lat.toFixed(3) + ',' + long.toFixed(3));
 
         // Tell the program not to geocode ('#location').val() since we already have the full coordinates saved to lat and long.
+        // This will be overwritten back to true if the user types in the location box.
         inputAddress = false;
     };
 
     positionError = function() {
         $('#form-submit-message').text('Error getting address.');
     };
-
-
-
-
 
 });
