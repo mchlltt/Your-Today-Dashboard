@@ -5,7 +5,7 @@ $(document).ready(function () {
         url: qurl2,
         method: 'GET'
     }).done(function (data) {
-        console.log(data);
+        // console.log(data);
         for (var i = 0; i < 3; i++) {
             var d = $('<div class="well col-md-4 col-sm-4 col-xs-4">');
             var a = $('<h3>').html(data.articles[i].title);
