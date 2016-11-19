@@ -12,6 +12,7 @@
 		  firebase.initializeApp(config);
 
 
+
 			var txtEmail = document.getElementById('txtEmail');
 			var txtPassword = document.getElementById('txtPassword');
 			var btnLogin = document.getElementById('btnLogin');
@@ -23,17 +24,18 @@
 			var email = txtEmail.value;
 			var pass = txtPassword.value;
 			var auth = firebase.auth();
+
 			console.log(email);
 
 		//SIGN IN
 		auth.signInWithEmailAndPassword(email,pass);
-		promise.catch(e => console.log(e.message));
+		promise.catch(function (e) {console.log(e.message);});
 
 		});
 
 
 		//ADD SIGNUP AND EVENT
-		btnSignUp.addEventListener('click', e =>{
+		btnSignUp.addEventListener('click', function(e){
 			
 			//GET EMAIL AND PASSWORD
 				var email = txtEmail.value;
@@ -42,18 +44,23 @@
 
 				// SIGN IN
 				var promise = auth.createUserWithEmailAndPassword(email,pass);
+
 			promise
-				.catch(e => console.log(e.message))
+				.catch(function(e){
+					console.log(e.message)
+				})
 		});
 
 		//ADD A REALTIME LISTENER
-		firebase.auth().onAuthStateChanged(firebaseUser => {
+		firebase.auth().onAuthStateChanged(function(firebaseUser) {
+
 			if(firebaseUser){
 
 				console.log("You are logged in as: ", firebaseUser);
 			}else{
 				console.log("you are NOT logged in")
 			}
+		
 		});
 
 
