@@ -16,12 +16,17 @@
 
 <body>
     <div class="row center-block">
-        <div class="col-xs-12 login center-block">
-            <form class="cente">
-                <label for="username">Username</label>
-                <input type="text" id="username" class="form-control center-block">
-                <button class="btn btn-success center-block" id="login-button" type="submit">Log In</button>
-            </form>
+        <div class="col-xs-12 login-form">
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="Email">
+            <label for="password">Password</label>
+            <input id="password" type="password" placeholder="password">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <button id="login-button" class="btn btn-action">Log In</button>
+            <button id="logout-button" class="btn btn-action hide">Log Out</button>
         </div>
     </div>
     <div class="container row center-block">

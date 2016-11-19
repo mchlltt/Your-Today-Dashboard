@@ -1,5 +1,6 @@
 $(document).ready(function() {
 
+    // Firebase Set-Up ---->
     // Configure and initialize Firebase.
     var config = {
         apiKey: "AIzaSyDCO42TtlK2h-MzIpVt1qGGQR-AmpwQVS0",
@@ -18,48 +19,98 @@ $(document).ready(function() {
     var displayNames = database.ref('displayNames');
     var locations = database.ref('locations');
 
-    // Initialize variables that will be written to or read from Firebase.
-    var username = 'mchlltt';
+    // Assign authentication tools to variables.
+    var auth = firebase.auth();
+    // <---- Firebase Set-Up
+
+
+
+    // Initialize variables --->
+    var email = $('#email').val();
+    var password = $('#password').val();
+    var name;
     var displayName;
     var location;
     var lat;
     var long;
+    // <--- Initialize variables.
 
-    // Fake-simulating logging in.
-    // This event listener will be replaced with what actually happens when you log in successfully.
-    $('#login-button').on('click', function() {
 
-        username = $('#username').val();
-        users.child(username).once('value', function(snapshot) {
-            if (!snapshot.exists()) {
-                var usernameObj = {};
-                usernameObj[username] = {
-                    username: username
-                };
-                users.update(usernameObj);
-            }
+    // Authentication ---->
+    // On login-button click..
+    $('#login-button').on('click', function(e) {
+
+        // Get email & stuff.
+        email = $('#email').val();
+        password = $('#password').val();
+
+        // Promise attempts to sign in.
+        var promise = auth.signInWithEmailAndPassword(email, password);
+
+        // If it fails, log the error message.
+        promise.catch(function(e) {
+            console.log(e.message);
         });
-
-        $('#login-button').hide();
-        // Check whether you need to show the form.
-        $.when(isUserInfoNeeded()).done(showForm);
 
         // Don't refresh.
         return false;
     });
 
+    // On logout-button click.
+    $('#logout-button').on('click', function() {
+        // Sign out.
+        auth.signOut();
+
+        // Hide/show buttons.
+        $('.login-form').show();
+        $('#logout-button').addClass('hide');
+        $('#login-button').show();
+        $('.welcome').hide();
+        $('.change').hide();
+    });
+
+    // Realtime authentication state listener.
+    auth.onAuthStateChanged(function(firebaseUser) {
+        if (firebaseUser) {
+            // Log that you are logged in.
+            console.log("You are logged in as: ", firebaseUser);
+            // Do successful log-in stuff.
+            afterLogIn(firebaseUser);
+        } else {
+            // Log that you are not logged in.
+            console.log("you are NOT logged in");
+        }
+    });
+
+    // What to do when authentication is successful.
+    afterLogIn = function(firebaseUser) {
+        // Hide/show buttons.
+        $('.login-form').hide();
+        $('#email').val('');
+        $('#password').val('');
+        $('#login-button').hide();
+        $('#logout-button').removeClass('hide');
+        name = firebaseUser.email.split('@')[0];
+
+        // Check whether you need to show the form.
+        $.when(isUserInfoNeeded()).done(showForm);
+    };
+    // <---- Authentication
+
+
     // Check whether we have the form inputs already.
     isUserInfoNeeded = function() {
-        // Check if a display name is already known for this username.
-        displayNames.child(username).once('value', function(snapshot) {
+
+        // Check if a display name is already known for this email.
+        displayNames.child(name).once('value', function(snapshot) {
             if (snapshot.exists()) {
                 displayName = snapshot.val().displayName;
                 $('#displayName').val(displayName);
             }
         });
 
-        // Check if a location is already known for this username.
-        return locations.child(username).once('value', function(snapshot) {
+        // Check if a location is already known for this email.
+        return locations.child(name).once('value', function(snapshot) {
             if (snapshot.exists()) {
                 location = snapshot.val().location;
                 $('#location').val(location);
@@ -120,7 +171,7 @@ $(document).ready(function() {
         // Verify that a name was input before sending it to Firebase.
         if (displayName.length > 0) {
             var displayNameObj = {};
-            displayNameObj[username] = {
+            displayNameObj[name] = {
                 displayName: displayName
             };
             displayNames.update(displayNameObj);
@@ -147,7 +198,7 @@ $(document).ready(function() {
 
                     // Write location and lat/long to Firebase.            
                     var locationObj = {};
-                    locationObj[username] = {
+                    locationObj[name] = {
                         location: location,
                         locationName: locationName,
                         lat: lat,
@@ -174,18 +225,22 @@ $(document).ready(function() {
     });
 
 
-    // Listen for changes in name.
+    // Listen for changes in name once logged in.
     displayNames.on('value', function(snapshot) {
-        displayName = snapshot.child(username).val().displayName;
-        $('#hello').text('Hello ' + displayName + '!');
+        if (name !== undefined) {
+            displayName = snapshot.child(name).val().displayName;
+            $('#hello').text('Hello ' + displayName + '!');
+        }
     });
 
 
-    // Listen for changes in location.
+    // Listen for changes in location once logged in.
     locations.on('value', function(snapshot) {
-        lat = snapshot.child(username).val().lat;
-        long = snapshot.child(username).val().long;
-        locationName = snapshot.child(username).val().locationName;
+        if (location !== undefined) {
+            lat = snapshot.child(name).val().lat;
+            long = snapshot.child(name).val().long;
+            locationName = snapshot.child(name).val().locationName;
+        }
     });
 
     // Fetch weather.
