@@ -12,17 +12,17 @@
 		  firebase.initializeApp(config);
 
 
-		const txtEmail = document.getElementById('txtEmail');
-		const txtPassword = document.getElementById('txtPassword');
-		const btnLogin = document.getElementById('btnLogin');
-		const btnSignUp = document.getElementById('btnLogout');
-		const btnLogout = document.getElementById('btnLogin');
+			var txtEmail = document.getElementById('txtEmail');
+			var txtPassword = document.getElementById('txtPassword');
+			var btnLogin = document.getElementById('btnLogin');
+			var btnSignUp = document.getElementById('btnLogout');
+			var btnLogout = document.getElementById('btnLogin');
 
-	btnLogin.addEventListener('click', e => {
+	btnLogin.addEventListener('click', function(e) {
 		//GET EMAIL AND PASSWORD
-		const email = txtEmail.value;
-		const pass = txtPassword.value;
-		const auth = firebase.auth();
+			var email = txtEmail.value;
+			var pass = txtPassword.value;
+			var auth = firebase.auth();
 			console.log(email);
 
 		//SIGN IN
@@ -36,12 +36,12 @@
 		btnSignUp.addEventListener('click', e =>{
 			
 			//GET EMAIL AND PASSWORD
-			const email = txtEmail.value;
-			const pass = txtPassword.value;
-			const auth = firebase.auth();
+				var email = txtEmail.value;
+				var pass = txtPassword.value;
+				var auth = firebase.auth();
 
 				// SIGN IN
-			const promise = auth.createUserWithEmailAndPassword(email,pass);
+				var promise = auth.createUserWithEmailAndPassword(email,pass);
 			promise
 				.catch(e => console.log(e.message))
 		});

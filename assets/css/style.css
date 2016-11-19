@@ -1,4 +1,40 @@
 body {
 	min-height: 100vh;
+	padding: 1%;
 	width: 100%;
+}
+
+.form {
+	display: none;
+	width: 50%;
+}
+
+.login {
+	width: 30%;
+}
+
+.welcome {
+	display: none;
+	text-align: center;
+}
+
+.input-group {
+	width: 100%;
+}
+
+.btn {
+	margin: 1% auto;
+}
+
+.change {
+	display: none;
+}
+
+.buttons {
+	margin-left: -5px;
+	margin-right: -5px;
+}
+
+.btnSource {
+	margin: 0 5px;
 }
