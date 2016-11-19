@@ -38,3 +38,7 @@ body {
 .btnSource {
 	margin: 0 5px;
 }
+
+header img {
+	width: 100%;
+}
