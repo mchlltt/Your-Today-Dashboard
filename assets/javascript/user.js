@@ -19,17 +19,26 @@ $(document).ready(function() {
     var locations = database.ref('locations');
 
     // Initialize variables that will be written to or read from Firebase.
+    var username = 'mchlltt';
     var displayName;
     var location;
     var lat;
     var long;
-    
-    // *** Hard-coded test username. This will have been received through log-in process.
-    var username = 'mchlltt';
 
     // Fake-simulating logging in.
     // This event listener will be replaced with what actually happens when you log in successfully.
     $('#login-button').on('click', function() {
+
+        username = $('#username').val();
+        users.child(username).once('value', function(snapshot) {
+            if (!snapshot.exists()) {
+                var usernameObj = {};
+                usernameObj[username] = {
+                    username: username
+                };
+                users.update(usernameObj);
+            }
+        });
 
         $('#login-button').hide();
         // Check whether you need to show the form.
@@ -38,7 +47,7 @@ $(document).ready(function() {
         // Don't refresh.
         return false;
     });
-    
+
     // Check whether we have the form inputs already.
     isUserInfoNeeded = function() {
         // Check if a display name is already known for this username.
@@ -50,7 +59,7 @@ $(document).ready(function() {
         });
 
         // Check if a location is already known for this username.
-        return locations.child(username).once('value',function(snapshot) {
+        return locations.child(username).once('value', function(snapshot) {
             if (snapshot.exists()) {
                 location = snapshot.val().location;
                 $('#location').val(location);
@@ -134,11 +143,13 @@ $(document).ready(function() {
                     // Save latitude and longitude.
                     lat = results[0].geometry.location.lat();
                     long = results[0].geometry.location.lng();
+                    locationName = results[0].formatted_address;
 
                     // Write location and lat/long to Firebase.            
                     var locationObj = {};
                     locationObj[username] = {
                         location: location,
+                        locationName: locationName,
                         lat: lat,
                         long: long
                     };
@@ -169,11 +180,12 @@ $(document).ready(function() {
         $('#hello').text('Hello ' + displayName + '!');
     });
 
-    
+
     // Listen for changes in location.
     locations.on('value', function(snapshot) {
         lat = snapshot.child(username).val().lat;
         long = snapshot.child(username).val().long;
+        locationName = snapshot.child(username).val().locationName;
     });
 
     // Fetch weather.
@@ -183,6 +195,7 @@ $(document).ready(function() {
 
         $.getJSON(url + apiKey + "/" + lat + "," + long + "?callback=?", function(data) {
             // console.log(data);
+            $('#weatherLocation').html('The weather for ' + locationName);
             $('#weather').html('The temperature: ' + data.currently.temperature + ' degrees');
             $('#summary').html(data.currently.summary);
         });
