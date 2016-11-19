@@ -59,7 +59,7 @@ $(document).ready(function () {
                 var c = $('<img src="' + data.articles[i].urlToImage + '"/>');
                 var e = $('<a href="' + data.articles[i].url + '" target="blank"></a>').html('Read more');
                 c.addClass('img-responsive img-rounded mx-auto');
-                d.append(a, b, c);
+                d.append(a, b, e, c);
                 $('.article').append(d);
             }
         });
