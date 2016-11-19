@@ -20,7 +20,6 @@ $(document).ready(function () {
         url: "https://newsapi.org/v1/articles?source=reddit-r-all&sortBy=top&apiKey=3e7d2dc0d0f743f2977afde6e24105ea"
     }, {
         source: "Wired",
-        url: "https://newsapi.org/v1/articles?source=wired-de&sortBy=top&apiKey=3e7d2dc0d0f743f2977afde6e24105ea"
     }];
 
     makeButtons();
@@ -44,7 +43,6 @@ $(document).ready(function () {
             getNews();
         });
     }
-
     function getNews() {
         qurl = newsSource[sourceIndex].url;
         $.ajax({
