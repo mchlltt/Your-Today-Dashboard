@@ -25,3 +25,12 @@ body {
 .change {
 	display: none;
 }
+
+.buttons {
+	margin-left: -5px;
+	margin-right: -5px;
+}
+
+.btnSource {
+	margin: 0 5px;
+}
