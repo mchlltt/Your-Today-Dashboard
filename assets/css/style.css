@@ -30,11 +30,14 @@ body {
 	display: none;
 }
 
-.buttons {
-	margin-left: -5px;
-	margin-right: -5px;
+.list-style {
+	list-style: none;
 }
 
-.btnSource {
-	margin: 0 5px;
+.well {
+	align-items: stretch;
+}
+
+.your-news {
+	padding-left: 19px;
 }

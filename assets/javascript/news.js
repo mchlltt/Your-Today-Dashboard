@@ -27,12 +27,14 @@ $(document).ready(function () {
 
     function makeButtons() {
         for (var i = 0; i < newsSource.length; i++) {
-            var a = $('<button>').attr({
-                'class': 'btnSource btn btn-primary',
+            var b = $('<li>').addClass('');
+            var a = $('<a>').attr({
+                'class': 'btnSource',
                 'data-index': i
             });
             a.html(newsSource[i].source);
-            $('.buttons').append(a);
+            b.append(a);
+            $('.buttons').append(b);
         }
     }
     var sourceIndex;
@@ -40,26 +42,29 @@ $(document).ready(function () {
     function buttonClick() {
         $(document).on('click', '.btnSource', function () {
             sourceIndex = $(this).data('index');
+            $('.article').empty();
+            $('.article').html('Loading...');
             getNews();
         });
     }
+
     function getNews() {
         qurl = newsSource[sourceIndex].url;
         $.ajax({
             url: qurl,
             method: 'GET'
         }).done(function (data) {
-            console.log(data);
             $('.article').empty();
+            // var d = $('<div class="well col-md-12 col-sm-12 col-xs-12">');
             for (var i = 0; i < 3; i++) {
-                var d = $('<div class="well col-md-4 col-sm-4 col-xs-4">');
+                var f = $('<div class="well col-md-12 col-sm-12 col-xs-12">');
                 var a = $('<h3>').html(data.articles[i].title);
                 var b = $('<p>').html(data.articles[i].description);
                 var c = $('<img src="' + data.articles[i].urlToImage + '"/>');
                 var e = $('<a href="' + data.articles[i].url + '" target="blank"></a>').html('Read more');
                 c.addClass('img-responsive img-rounded mx-auto');
-                d.append(a, b, e, c);
-                $('.article').append(d);
+                f.append(a, b, e, c);
+                $('.article').append(f);
             }
         });
     }
