@@ -9,6 +9,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+    <script src="https://rawgithub.com/darkskyapp/skycons/master/skycons.js"></script>
     <script src="assets/javascript/user.js"></script>
     <script src="assets/javascript/news.js"></script>
     <script src="assets/javascript/weather.js"></script>
@@ -72,12 +73,13 @@
             <div class="article"></div>
         </div>
         <div class="col-xs-3">
+            <h3>Weather</h3>
             <button id="weather-button" class="btn" type="submit">Get Weather</button>
-            <h5>Powered by Dark Sky</h5>
             <p id="weatherLocation"></p>
             <p id="weather">Weather Report:</p>
-            <div class="weatherReport">Next Hour: <span id="summary"></span>
-            </div>
+            <div class="weatherReport">Next Hour: <span id="summary"></span></div>
+            <canvas id="icon1" width="128" height="128"></canvas>
+            <h6>Powered by Dark Sky</h6>
         </div>
     </div>
 </body>
