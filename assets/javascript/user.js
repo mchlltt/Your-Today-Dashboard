@@ -252,7 +252,7 @@ $(document).ready(function () {
         var url = 'https://api.forecast.io/forecast/';
 
         $.getJSON(url + apiKey + "/" + lat + "," + long + "?callback=?", function (data) {
-            console.log(data);
+            // console.log(data);
             $('#weatherLocation').html('The weather for ' + locationName);
             $('#weather').html('The temperature: ' + data.currently.temperature + ' °F');
             $('#summary').html(data.currently.summary);

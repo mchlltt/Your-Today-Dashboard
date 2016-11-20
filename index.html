@@ -16,19 +16,21 @@
 </head>
 
 <body>
-    <div class="row center-block">
+    <div class="container row center-block">
         <div class="col-xs-12 login-form">
-            <label for="email">Email</label>
-            <input id="email" type="email" placeholder="Email">
-            <label for="password">Password</label>
-            <input id="password" type="password" placeholder="password">
+            <div class="row col-xs-3">
+                <label for="email">Email</label>
+                <input id="email" type="email" placeholder="Email">
+            </div>
+            <div class="row col-xs-3">
+                <label for="password">Password</label>
+                <input id="password" type="password" placeholder="password">
+            </div>
+            <div class="col-xs-3">
+                <button id="login-button" class="btn btn-action btn-thin">Log In</button>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <button id="login-button" class="btn btn-action">Log In</button>
-            <button id="logout-button" class="btn btn-action hide">Log Out</button>
-        </div>
+        <button id="logout-button" class="btn btn-action hide btn-thin">Log Out</button>
     </div>
     <div class="container row center-block">
         <div class="col-xs-12">
