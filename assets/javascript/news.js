@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var qurl = "";
-    newsSource = [{
+    var news = [{
         source: "Ars Technica",
         url: "https://newsapi.org/v1/articles?source=ars-technica&sortBy=top&apiKey=3e7d2dc0d0f743f2977afde6e24105ea"
     }, {
@@ -71,34 +71,38 @@ $(document).ready(function () {
         url: "https://newsapi.org/v1/articles?source=time&sortBy=top&apiKey=3e7d2dc0d0f743f2977afde6e24105ea"
     }];
 
-    makeLinks();
+    makeNewsSources();
     linkClick();
 
-    function makeLinks() {
-        for (var i = 0; i < newsSource.length; i++) {
+    // Generate news sources on the left column
+    function makeNewsSources() {
+        for (var i = 0; i < news.length; i++) {
             var b = $('<li>').addClass('linkSource');
             var a = $('<a>').attr({
                 'class': 'linkSource',
                 'data-index': i
             });
-            a.html(newsSource[i].source);
+            a.html(news[i].source);
             b.append(a);
             $('.buttons').append(b);
         }
     }
-    var sourceIndex;
 
+    var sourceIndex;
+    // sets up click event listener for news source
     function linkClick() {
         $(document).on('click', '.linkSource', function () {
             sourceIndex = $(this).data('index');
             $('.article').empty();
             $('.article').html('Loading...').addClass('your-news');
+            $('.your-news').html('<h3>Your News: ' + news[sourceIndex].source + '</h3>');
             getNews();
         });
     }
 
+    // makes API call and populates news div
     function getNews() {
-        qurl = newsSource[sourceIndex].url;
+        qurl = news[sourceIndex].url;
         $.ajax({
             url: qurl,
             method: 'GET'
