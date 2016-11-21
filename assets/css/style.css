@@ -4,6 +4,10 @@ body {
 	width: 100%;
 }
 
+.btn-thin {
+	padding: 0 15px;
+}
+
 .form {
 	display: none;
 	width: 50%;
@@ -20,10 +24,6 @@ body {
 
 .input-group {
 	width: 100%;
-}
-
-.btn {
-	margin: 1% auto;
 }
 
 .change {
@@ -44,4 +44,8 @@ body {
 
 .linkSource {
 	margin: 15px auto;
+}
+
+#icon1 {
+	padding-top: 15px;
 }
