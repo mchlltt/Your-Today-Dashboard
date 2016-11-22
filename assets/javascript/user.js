@@ -283,6 +283,7 @@ $(document).ready(function () {
             $('#weatherLocation').html('The weather for ' + locationName);
             $('#weather').html('The temperature: ' + data.currently.temperature + ' °F');
             $('#summary').html(data.currently.summary);
+            $('#precipProb').html(data.currently.precipProbability);
             var icon = data.currently.icon;
             icon.toUpperCase();
             skycons.set('icon1', icon);
