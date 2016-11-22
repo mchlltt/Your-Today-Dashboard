@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
     // Firebase Set-Up ---->
     // Configure and initialize Firebase.
@@ -33,12 +33,15 @@ $(document).ready(function() {
     var location;
     var lat;
     var long;
+    var skycons = new Skycons({
+        "color": "orange"
+    });
     // <--- Initialize variables.
 
 
     // Authentication ---->
     // On login-button click..
-    $('#login-button').on('click', function(e) {
+    $('#login-button').on('click', function (e) {
 
         // Get email & stuff.
         email = $('#email').val();
@@ -48,7 +51,7 @@ $(document).ready(function() {
         var promise = auth.signInWithEmailAndPassword(email, password);
 
         // If it fails, log the error message.
-        promise.catch(function(e) {
+        promise.catch(function (e) {
             console.log(e.message);
         });
 
@@ -57,7 +60,7 @@ $(document).ready(function() {
     });
 
     // On logout-button click.
-    $('#logout-button').on('click', function() {
+    $('#logout-button').on('click', function () {
         // Sign out.
         auth.signOut();
 
@@ -70,7 +73,7 @@ $(document).ready(function() {
     });
 
     // Realtime authentication state listener.
-    auth.onAuthStateChanged(function(firebaseUser) {
+    auth.onAuthStateChanged(function (firebaseUser) {
         if (firebaseUser) {
             // Log that you are logged in.
             console.log("You are logged in as: ", firebaseUser);
@@ -83,7 +86,7 @@ $(document).ready(function() {
     });
 
     // What to do when authentication is successful.
-    afterLogIn = function(firebaseUser) {
+    afterLogIn = function (firebaseUser) {
         // Hide/show buttons.
         $('.login-form').hide();
         $('#email').val('');
@@ -99,10 +102,10 @@ $(document).ready(function() {
 
 
     // Check whether we have the form inputs already.
-    isUserInfoNeeded = function() {
+    isUserInfoNeeded = function () {
 
         // Check if a display name is already known for this email.
-        displayNames.child(name).once('value', function(snapshot) {
+        displayNames.child(name).once('value', function (snapshot) {
             if (snapshot.exists()) {
                 displayName = snapshot.val().displayName;
                 $('#displayName').val(displayName);
@@ -110,7 +113,7 @@ $(document).ready(function() {
         });
 
         // Check if a location is already known for this email.
-        return locations.child(name).once('value', function(snapshot) {
+        return locations.child(name).once('value', function (snapshot) {
             if (snapshot.exists()) {
                 location = snapshot.val().location;
                 $('#location').val(location);
@@ -119,7 +122,7 @@ $(document).ready(function() {
     };
 
     // If we found that we have a display name and location already, hide the form.
-    showForm = function() {
+    showForm = function () {
         if (displayName === undefined || location === undefined) {
             $('.form').show();
         } else {
@@ -128,14 +131,14 @@ $(document).ready(function() {
         }
     };
 
-    $('#change-button').on('click', function() {
+    $('#change-button').on('click', function () {
         $('.form').show();
         $('.welcome').hide();
         $('.change').hide();
     });
 
     // Get location from 'Auto-Locate' button.
-    $('#auto-locate').on('click', function() {
+    $('#auto-locate').on('click', function () {
         if (navigator.geolocation) {
             // Hand the results to savePosition.
             navigator.geolocation.getCurrentPosition(savePosition, positionError);
@@ -149,7 +152,7 @@ $(document).ready(function() {
     });
 
     // If auto-locate is successful, write it to the location input..
-    savePosition = function(position) {
+    savePosition = function (position) {
         lat = position.coords.latitude;
         long = position.coords.longitude;
 
@@ -158,13 +161,13 @@ $(document).ready(function() {
     };
 
     // If auto-locate fails, display error text.
-    positionError = function() {
+    positionError = function () {
         $('#form-submit-message').text('Error getting address.');
     };
 
 
     // When the form is submitted with the display name and location,
-    $('#submit-button').on('click', function() {
+    $('#submit-button').on('click', function () {
         // Get contents of displayName input.
         displayName = $('#displayName').val();
 
@@ -188,7 +191,7 @@ $(document).ready(function() {
             // Geocode location input.
             geocoder.geocode({
                 'address': location
-            }, function(results, status) {
+            }, function (results, status) {
                 // If geocoding was successful,
                 if (status == google.maps.GeocoderStatus.OK) {
                     // Save latitude and longitude.
@@ -226,7 +229,7 @@ $(document).ready(function() {
 
 
     // Listen for changes in name once logged in.
-    displayNames.on('value', function(snapshot) {
+    displayNames.on('value', function (snapshot) {
         if (name !== undefined) {
             displayName = snapshot.child(name).val().displayName;
             $('#hello').text('Hello ' + displayName + '!');
@@ -235,7 +238,7 @@ $(document).ready(function() {
 
 
     // Listen for changes in location once logged in.
-    locations.on('value', function(snapshot) {
+    locations.on('value', function (snapshot) {
         if (location !== undefined) {
             lat = snapshot.child(name).val().lat;
             long = snapshot.child(name).val().long;
@@ -244,15 +247,19 @@ $(document).ready(function() {
     });
 
     // Fetch weather.
-    $('#weather-button').on('click', function() {
+    $('#weather-button').on('click', function () {
         var apiKey = '0b3cbdf73e99584a55eddd1b6bd851f6';
         var url = 'https://api.forecast.io/forecast/';
 
-        $.getJSON(url + apiKey + "/" + lat + "," + long + "?callback=?", function(data) {
+        $.getJSON(url + apiKey + "/" + lat + "," + long + "?callback=?", function (data) {
             // console.log(data);
             $('#weatherLocation').html('The weather for ' + locationName);
-            $('#weather').html('The temperature: ' + data.currently.temperature + ' degrees');
+            $('#weather').html('The temperature: ' + data.currently.temperature + ' °F');
             $('#summary').html(data.currently.summary);
+            var icon = data.currently.icon;
+            icon.toUpperCase();
+            skycons.set('icon1', icon);
+            skycons.play();
         });
         //https://api.forecast.io/forecast/0b3cbdf73e99584a55eddd1b6bd851f6
 

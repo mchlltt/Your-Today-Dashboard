@@ -4,6 +4,10 @@ body {
 	width: 100%;
 }
 
+.btn-thin {
+	padding: 0 15px;
+}
+
 .form {
 	display: none;
 	width: 50%;
@@ -22,10 +26,6 @@ body {
 	width: 100%;
 }
 
-.btn {
-	margin: 1% auto;
-}
-
 .change {
 	display: none;
 }
@@ -40,4 +40,12 @@ body {
 
 .your-news {
 	padding-left: 19px;
+}
+
+.linkSource {
+	margin: 15px auto;
+}
+
+#icon1 {
+	padding-top: 15px;
 }

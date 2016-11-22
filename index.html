@@ -9,25 +9,28 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+    <script src="https://rawgithub.com/darkskyapp/skycons/master/skycons.js"></script>
     <script src="assets/javascript/user.js"></script>
     <script src="assets/javascript/news.js"></script>
     <script src="assets/javascript/weather.js"></script>
 </head>
 
 <body>
-    <div class="row center-block">
+    <div class="container row center-block">
         <div class="col-xs-12 login-form">
-            <label for="email">Email</label>
-            <input id="email" type="email" placeholder="Email">
-            <label for="password">Password</label>
-            <input id="password" type="password" placeholder="password">
+            <div class="row col-xs-3">
+                <label for="email">Email</label>
+                <input id="email" type="email" placeholder="Email">
+            </div>
+            <div class="row col-xs-3">
+                <label for="password">Password</label>
+                <input id="password" type="password" placeholder="password">
+            </div>
+            <div class="col-xs-3">
+                <button id="login-button" class="btn btn-action btn-thin">Log In</button>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <button id="login-button" class="btn btn-action">Log In</button>
-            <button id="logout-button" class="btn btn-action hide">Log Out</button>
-        </div>
+        <button id="logout-button" class="btn btn-action hide btn-thin">Log Out</button>
     </div>
     <div class="container row center-block">
         <div class="col-xs-12">
@@ -72,12 +75,13 @@
             <div class="article"></div>
         </div>
         <div class="col-xs-3">
+            <h3>Weather</h3>
             <button id="weather-button" class="btn" type="submit">Get Weather</button>
-            <h5>Powered by Dark Sky</h5>
-            <p id="weatherLocation"></p>
-            <p id="weather">Weather Report:</p>
-            <div class="weatherReport">Next Hour: <span id="summary"></span>
-            </div>
+            <h5 id="weatherLocation"></h5>
+            <h5 id="weather">Weather Report:</h5>
+            <div class="weatherReport">Next Hour: <span id="summary"></span></div>
+            <canvas id="icon1" width="128" height="128"></canvas>
+            <h6>Powered by Dark Sky</h6>
         </div>
     </div>
 </body>
