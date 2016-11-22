@@ -64,26 +64,39 @@
                 <button class="btn btn-info center-block" id="change-button">Change name or location.</button>
             </div>
         </div>
-        <div class="container row">
-            <div class="col-md-3 pull-left">
-                <ul class="list-style">
-                    <li>
-                        <h3>Feeds</h3></li>
-                </ul>
-                <ul class="buttons list-style"></ul>
+    </div>
+    <div class="container row center-block">
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Feeds</h3>
+                </div>
+                <div class="panel-body buttons"></div>
             </div>
-            <div class="col-md-6 pull-left">
-                <h3 class="your-news">Your News</h3>
-                <div class="article"></div>
+        </div> 
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="your-news">Your News</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="article"></div>
+                </div>
             </div>
-            <div class="col-xs-3 pull-right">
-                <h3>Weather</h3>
-                <button id="weather-button" class="btn" type="submit">Get Weather</button>
-                <h5 id="weatherLocation"></h5>
-                <h5 id="weather">Weather Report:</h5>
-                <div class="weatherReport">Next Hour: <span id="summary"></span></div>
-                <canvas id="icon1" width="128" height="128"></canvas>
-                <h6>Powered by Dark Sky</h6>
+        </div>
+        <div class="col-xs-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Weather</h3>
+                </div>
+                <div class="panel-body">
+                    <button id="weather-button" class="btn" type="submit">Get Weather</button>
+                    <h5 id="weatherLocation"></h5>
+                    <h5 id="weather">Weather Report:</h5>
+                    <div class="weatherReport">Next Hour: <span id="summary"></span></div>
+                    <canvas id="icon1" width="128" height="128"></canvas>
+                    <h6>Powered by Dark Sky</h6>
+                </div>
             </div>
         </div>
     </div>
