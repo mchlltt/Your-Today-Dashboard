@@ -4,6 +4,10 @@ body {
 	width: 100%;
 }
 
+.btn-thin {
+	padding: 0 15px;
+}
+
 .form {
 	display: none;
 	width: 50%;
@@ -22,17 +26,24 @@ body {
 	width: 100%;
 }
 
-.btn {
-	margin: 1% auto;
-}
-
 .change {
 	display: none;
 }
 
-.buttons {
-	margin-left: -5px;
-	margin-right: -5px;
+.list-style {
+	list-style: none;
+}
+
+.well {
+	align-items: stretch;
+}
+
+.your-news {
+	padding-left: 19px;
+}
+
+.linkSource {
+	margin: 15px auto;
 }
 
 .btnSource {
@@ -41,4 +52,8 @@ body {
 
 header img {
 	width: 100%;
+}
+
+#icon1 {
+	padding-top: 15px;
 }
