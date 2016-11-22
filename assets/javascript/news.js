@@ -94,7 +94,7 @@ $(document).ready(function () {
         $(document).on('click', '.linkSource', function () {
             sourceIndex = $(this).data('index');
             $('.article').empty();
-            $('.article').html('Loading...').addClass('your-news');
+            $('.article').html('Loading...').addClass('your-news clearfix');
             $('.your-news').html('<h3>Your News: ' + news[sourceIndex].source + '</h3>');
             getNews();
         });
@@ -109,7 +109,7 @@ $(document).ready(function () {
         }).done(function (data) {
             $('.article').empty();
             for (var i = 0; i < 3; i++) {
-                var f = $('<div class="col-md-12 col-sm-12 col-xs-12">');
+                var f = $('<div class="col-md-12 col-sm-12 col-xs-12 your-news">');
                 var a = $('<h3>').html(data.articles[i].title);
                 var b = $('<p>').html(data.articles[i].description);
                 var e = $('<a href="' + data.articles[i].url + '" target="blank"></a>').html('Read more');
