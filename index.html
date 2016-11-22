@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Dashboard</title>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-OvY8uwgdrNLTUgJ1VoTpyowRQ3o75LU"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-OvY8uwgdrNLTUgJ1VoTpyowRQ3o75LU&libraries=places"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
@@ -16,77 +16,68 @@
 </head>
 
 <body>
-    <div class="container row center-block">
-        <div class="col-xs-12 login-form">
-            <div class="row col-xs-3">
-                <label for="email">Email</label>
-                <input id="email" type="email" placeholder="Email">
-            </div>
-            <div class="row col-xs-3">
-                <label for="password">Password</label>
-                <input id="password" type="password" placeholder="password">
-            </div>
-            <div class="col-xs-3">
-                <button id="login-button" class="btn btn-action btn-thin">Log In</button>
-            </div>
-        </div>
-        <button id="logout-button" class="btn btn-action hide btn-thin">Log Out</button>
-    </div>
-    <div class="container row center-block">
-        <div class="col-xs-12">
-            <form class="center-block form">
-                <div class="form-group">
-                    <label for="displayName">Your Name</label>
-                    <input type="text" id="displayName" class="form-control">
+    <div class="transparency-wrapper">
+        <div class="row center-block">
+            <div class="col-xs-12 login-form">
+                <div class="row col-xs-3">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" placeholder="Email">
                 </div>
-                <div class="input-group">
-                    <label for="location">Location</label>
+                <div class="row col-xs-3">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" placeholder="password">
+                </div>
+                <div class="col-xs-3">
+                    <button id="login-button" class="btn btn-action btn-thin">Log In</button>
+                </div>
+            </div>
+            <button id="logout-button" class="btn btn-action hide btn-thin">Log Out</button>
+        </div>
+        <div class="container row center-block">
+            <div class="col-xs-12">
+                <form class="center-block form">
+                    <div class="form-group">
+                        <label for="displayName">Your Name</label>
+                        <input type="text" id="displayName" class="form-control">
+                    </div>
                     <div class="input-group">
-                        <input type="text" id="location" class="form-control pull-left">
-                        <span class="input-group-btn">
+                        <label for="location">Location</label>
+                        <div class="input-group">
+                            <input type="text" id="location" class="form-control pull-left">
+                            <span class="input-group-btn">
                            <button id="auto-locate" class="btn btn-info">Auto-Locate</button>
                         </span>
+                        </div>
                     </div>
-                </div>
-                <button type="submit" id="submit-button" class="btn btn-info">Submit</button>
-                <p id="form-submit-message"></p>
-            </form>
-        </div>
-    </div>
-    <div class="row welcome">
-        <div class="col-xs-12">
-            <h2 id="hello"></h2>
-        </div>
-    </div>
-    <div class="row change">
-        <div class="col-xs-12">
-            <button class="btn btn-info center-block" id="change-button">Change name or location.</button>
-        </div>
-    </div>
-    <div class="container row center-block">
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3>Feeds</h3>
-                </div>
-                <div class="panel-body buttons"></div>
-            </div>
-        </div> 
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="your-news">Your News</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="article"></div>
-                </div>
+                    <button type="submit" id="submit-button" class="btn btn-info">Submit</button>
+                    <p id="form-submit-message"></p>
+                </form>
             </div>
         </div>
-        <div class="col-xs-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3>Weather</h3>
-                </div>
+        <div class="row welcome">
+            <div class="col-xs-12">
+                <h2 id="hello"></h2>
+            </div>
+        </div>
+        <div class="row change">
+            <div class="col-xs-12">
+                <button class="btn btn-info center-block" id="change-button">Change name or location.</button>
+            </div>
+        </div>
+        <div class="container row">
+            <div class="col-md-3 pull-left">
+                <ul class="list-style">
+                    <li>
+                        <h3>Feeds</h3></li>
+                </ul>
+                <ul class="buttons list-style"></ul>
+            </div>
+            <div class="col-md-6 pull-left">
+                <h3 class="your-news">Your News</h3>
+                <div class="article"></div>
+            </div>
+            <div class="col-xs-3 pull-right">
+                <h3>Weather</h3>
                 <button id="weather-button" class="btn" type="submit">Get Weather</button>
                 <h5 id="weatherLocation"></h5>
                 <h5 id="weather">Weather Report:</h5>
