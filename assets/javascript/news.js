@@ -77,7 +77,7 @@ $(document).ready(function () {
     // Generate news sources on the left column
     function makeNewsSources() {
         for (var i = 0; i < news.length; i++) {
-            var b = $('<li>').addClass('linkSource');
+            var b = $('<div>').addClass('linkSource');
             var a = $('<a>').attr({
                 'class': 'linkSource',
                 'data-index': i
@@ -109,7 +109,7 @@ $(document).ready(function () {
         }).done(function (data) {
             $('.article').empty();
             for (var i = 0; i < 3; i++) {
-                var f = $('<div class="well col-md-12 col-sm-12 col-xs-12">');
+                var f = $('<div class="col-md-12 col-sm-12 col-xs-12">');
                 var a = $('<h3>').html(data.articles[i].title);
                 var b = $('<p>').html(data.articles[i].description);
                 var c = $('<img src="' + data.articles[i].urlToImage + '"/>');
