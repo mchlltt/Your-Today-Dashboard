@@ -112,8 +112,8 @@ $(document).ready(function () {
                 var f = $('<div class="col-md-12 col-sm-12 col-xs-12">');
                 var a = $('<h3>').html(data.articles[i].title);
                 var b = $('<p>').html(data.articles[i].description);
-                var c = $('<img src="' + data.articles[i].urlToImage + '"/>');
                 var e = $('<a href="' + data.articles[i].url + '" target="blank"></a>').html('Read more');
+                var c = $('<img src="' + data.articles[i].urlToImage + '"/><hr/>');
                 c.addClass('img-responsive img-rounded mx-auto');
                 f.append(a, b, e, c);
                 $('.article').append(f);
