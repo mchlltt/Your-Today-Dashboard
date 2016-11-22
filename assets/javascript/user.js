@@ -40,10 +40,10 @@ $(document).ready(function () {
 
 
     // Authentication ---->
-    // On login-button click..
+    // On login-button click.
     $('#login-button').on('click', function (e) {
 
-        // Get email & stuff.
+        // Get email & password.
         email = $('#email').val();
         password = $('#password').val();
 
@@ -70,6 +70,16 @@ $(document).ready(function () {
         $('#login-button').show();
         $('.welcome').hide();
         $('.change').hide();
+
+        // Reset variables
+        email = $('#email').val();
+        password = $('#password').val();
+        name = '';
+        displayName = '';
+        location = '';
+        lat = '';
+        long = '';
+
     });
 
     // Realtime authentication state listener.
@@ -198,12 +208,14 @@ $(document).ready(function () {
                     lat = results[0].geometry.location.lat();
                     long = results[0].geometry.location.lng();
                     locationName = results[0].formatted_address;
+                    placeID = results[0].place_id;
 
                     // Write location and lat/long to Firebase.            
                     var locationObj = {};
                     locationObj[name] = {
                         location: location,
                         locationName: locationName,
+                        placeID: placeID,
                         lat: lat,
                         long: long
                     };
@@ -243,6 +255,21 @@ $(document).ready(function () {
             lat = snapshot.child(name).val().lat;
             long = snapshot.child(name).val().long;
             locationName = snapshot.child(name).val().locationName;
+
+            // Fetch header image.
+
+            var placeID = snapshot.child(name).val().placeID;
+            var placeIDURL = "https://crossorigin.me/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBsgQ07A5r52jQrex89eg_mSYCoQME2v1g";
+            $.ajax({
+                url: placeIDURL,
+                method: 'GET'
+            }).done(
+                function(response) {
+                    var reference = response.result.photos[0].photo_reference;
+                    var photoURL = "https://crossorigin.me/https://maps.googleapis.com/maps/api/place/photo?maxwidth=1600&photoreference=" + reference + "&key=AIzaSyBYWYrtTu9U0zgCOTpVKL_WyLsaB365exk";
+                    $('body').css('background-image','url(' + photoURL + ')');
+                }
+            );
         }
     });
 
@@ -266,5 +293,4 @@ $(document).ready(function () {
         return false;
 
     });
-
 });
