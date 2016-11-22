@@ -40,10 +40,10 @@ $(document).ready(function () {
 
 
     // Authentication ---->
-    // On login-button click..
+    // On login-button click.
     $('#login-button').on('click', function (e) {
 
-        // Get email & stuff.
+        // Get email & password.
         email = $('#email').val();
         password = $('#password').val();
 
@@ -267,8 +267,7 @@ $(document).ready(function () {
                 function(response) {
                     var reference = response.result.photos[0].photo_reference;
                     var photoURL = "https://crossorigin.me/https://maps.googleapis.com/maps/api/place/photo?maxwidth=1600&photoreference=" + reference + "&key=AIzaSyBYWYrtTu9U0zgCOTpVKL_WyLsaB365exk";
-                    var headerIMG = $('#header-image');
-                    headerIMG.attr('src', photoURL);
+                    $('body').css('background-image','url(' + photoURL + ')');
                 }
             );
         }
