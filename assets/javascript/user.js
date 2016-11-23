@@ -63,7 +63,7 @@ $(document).ready(function() {
         $('.logged-in').hide();
 
         // Make sure the login box is showing.
-        $('.login').css('display','flex');
+        $('.login').css('display', 'flex');
 
         // Set background image to logged out default.
         $('body').css('background-image', 'url("assets/images/background/old_wall.png")');
@@ -289,7 +289,7 @@ $(document).ready(function() {
     });
 
 
-    updateDisplayName = function(snapshot) {
+    updateDisplayName = function() {
         $('#hello').text('Hello ' + displayName + '!');
     };
 
