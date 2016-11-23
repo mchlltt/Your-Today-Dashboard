@@ -33,6 +33,7 @@ $(document).ready(function() {
     var lat;
     var long;
     var photoURL;
+    var vicinity;
     var skycons = new Skycons({
         "color": "orange"
     });
@@ -58,22 +59,23 @@ $(document).ready(function() {
     showLoggedOutSite = function() {
         // Some of this may already be true, but since we are simultaneously accounting 
         // for on-pageload and on-signout, we are a bit more verbose.
-
         // Hide logged in only content.
         $('.logged-in').hide();
 
         // Make sure the login box is showing.
-        $('.login').show();
+        $('.login').css('display','flex');
 
         // Set background image to logged out default.
-        $('body').css('background-image', '../images/background/old_wall.png')
+        $('body').css('background-image', 'url("assets/images/background/old_wall.png")');
 
         // Make sure any welcome message content is erased.
-        $('hello').empty();
+        $('#hello').empty();
     };
 
     clearUserData = function() {
         // Reset variables. Some of this may already be true, but we want to be careful.
+        $('#displayName').val('');
+        $('#location').val('');
         email = '';
         password = '';
         name = '';
@@ -168,7 +170,7 @@ $(document).ready(function() {
 
     // If we found that we have a display name and location already, hide the form.
     showForm = function() {
-        if (displayName === undefined || location === undefined) {
+        if (displayName.length === 0 || location.length === 0) {
             $('.update-form-container').show();
         } else {
             updateDisplayName();
@@ -188,7 +190,7 @@ $(document).ready(function() {
     // Get location from 'Auto-Locate' button.
     $('#auto-locate').on('click', function() {
         $('#form-submit-message').text('');
-        $('.gps-svg').css('display','block');
+        $('.gps-svg').css('display', 'block');
         if (navigator.geolocation) {
             // If geolocation is available, hand the results to savePosition.
             navigator.geolocation.getCurrentPosition(savePosition, positionError);
@@ -287,15 +289,15 @@ $(document).ready(function() {
     });
 
 
-    updateDisplayName = function() {
+    updateDisplayName = function(snapshot) {
         $('#hello').text('Hello ' + displayName + '!');
     };
 
     // Listen for displayName initial value and changes.
-    database.ref().on('value', function(snapshot) {
+    displayNames.on('value', function(snapshot) {
         // Name becomes defined once there is successful authentication.
         if (name !== undefined) {
-            updateDisplayName(snapshot);
+            updateDisplayName();
         }
     });
 
@@ -331,26 +333,33 @@ $(document).ready(function() {
                                 locations.update(newPhotoURLObj);
                             } else {
                                 // Otherwise, we're going to look for a more broad location.
-                                var newTerm = response.result.vicinity;
-                                var geocoderVicinity = new google.maps.Geocoder();
-                                geocoderVicinity.geocode({
-                                    'address': newTerm
-                                }, function(results, status) {
-                                    // If geocoding was successful,
-                                    if (status == google.maps.GeocoderStatus.OK) {
-                                        // Save placeID locally and to Firebase.
-                                        placeID = results[0].place_id;
-                                        var newPlaceIDObj = {};
-                                        newPlaceIDObj[name] = {
-                                            location: location,
-                                            locationName: locationName,
-                                            placeID: placeID,
-                                            lat: lat,
-                                            long: long
-                                        };
-                                        locations.update(newPlaceIDObj);
+                                // Make sure the vicinity is in the response and length > 0.
+                                // Also, make sure it's not the same vicinity we just checked.
+                                // Between these two things, we avoid infinite loops.
+                                if (response.result.vicinity !== undefined && response.result.vicinity.length > 0) {
+                                    if (response.result.vicinity !== vicinity) {
+                                        vicinity = response.result.vicinity;
+                                        var geocoderVicinity = new google.maps.Geocoder();
+                                        geocoderVicinity.geocode({
+                                            'address': vicinity
+                                        }, function(results, status) {
+                                            // If geocoding was successful,
+                                            if (status == google.maps.GeocoderStatus.OK) {
+                                                // Save placeID locally and to Firebase.
+                                                placeID = results[0].place_id;
+                                                var newPlaceIDObj = {};
+                                                newPlaceIDObj[name] = {
+                                                    location: location,
+                                                    locationName: locationName,
+                                                    placeID: placeID,
+                                                    lat: lat,
+                                                    long: long
+                                                };
+                                                locations.update(newPlaceIDObj);
+                                            }
+                                        });
                                     }
-                                });
+                                }
                             }
                         }
                     );
