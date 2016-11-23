@@ -1,41 +1,37 @@
 body {
-	min-height: 100vh;
-	padding: 1%;
-	width: 100%;
-	/*background-color: lightgray;*/
+	/* Back-up color in case of image errors.*/
+	background-color: lightgray;
 	background-image: url("../images/background/old_wall.png");
 	background-size: cover;
 	background-repeat: no-repeat;
+	height: 96vh;
+	margin: 2vh 1vw;
+	padding: 2vh 1vw;
+	width: 98vw;
 }
 
 .btn-thin {
 	padding: 0 15px;
 }
 
-.form {
-	display: none;
+.update-form {
 	width: 50%;
 }
 
-.login {
-	width: 30%;
-}
-
-.welcome {
+.welcome,
+.update-form-container,
+.gps-svg {
 	display: none;
-	text-align: center;
 }
 
 .input-group {
 	width: 100%;
-}
-
-.change {
-	display: none;
+	margin: 1% 0;
 }
 
 .list-style {
 	list-style: none;
+	padding-left: 0;
 }
 
 .well {
@@ -43,7 +39,8 @@ body {
 }
 
 .your-news {
-	padding-left: 19px;
+	width: 100%;
+	padding-left: 0;
 }
 
 .linkSource {
@@ -54,12 +51,14 @@ body {
 	margin: 0 5px;
 }
 
-#icon1 {
+.icon {
 	padding-top: 15px;
 }
 
 .container {
 	width: 100%;
+	margin: 0;
+	padding: 0;
 }
 
 .transparency-wrapper {
@@ -68,9 +67,76 @@ body {
     border: 0 solid transparent;
     border-radius: 5px;
 	height: 100%;
+	padding: 1%;
+	width: 100%;
+	overflow-y: auto;
+}
+
+.login-form {
+	width: 33%;
+}
+
+.login {
+	display: flex;
+	justify-content: center;
+	align-items: center;	
+	height: 100%;
 	width: 100%;
 }
 
 .panel-default, .panel-heading {
 	background: none;
+}
+
+.inline-heading {
+	clear: none;
+	height: 100%;
+	margin: 0;
+	line-height: 28px;
+}
+
+.gps-svg {
+	clear: none;
+	margin: 0 auto;
+}
+
+.article {
+	min-height: 200px;
+}
+
+@media only screen and (min-width: 641px) {
+	.md-pull-right {
+		float: right;
+	}
+	.md-pull-left {
+		float: left;
+	}
+	.header {
+		padding: 0 15px;
+	}
+}
+
+@media only screen and (max-width: 640px) {
+	.inline-heading {
+		clear: both;
+		margin: 0 auto;
+		display: block;
+		text-align: center;
+		float: none;
+	}
+
+	.button-header {
+		clear: both;
+		margin: 1% auto;
+		float: none;
+		display: block;
+	}
+	.panel-body button {
+		margin: 0 auto;
+		display: block;
+	}
+
+	h4 {
+		text-align: center;
+	}
 }
