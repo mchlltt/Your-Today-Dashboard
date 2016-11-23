@@ -12,7 +12,6 @@
     <script src="https://rawgithub.com/darkskyapp/skycons/master/skycons.js"></script>
     <script src="assets/javascript/user.js"></script>
     <script src="assets/javascript/news.js"></script>
-    <script src="assets/javascript/weather.js"></script>
 </head>
 
 <body>
@@ -27,9 +26,9 @@
             </div>
         </div>
         <div class="logged-in">
-            <div class="row center-block">
-                <button id="logout-button" class="btn btn-action btn-thin btn-info center-block pull-left">Log Out</button>
-                <button id="change-button" class="btn btn-action btn-thin btn-info center-block change pull-right">Change name or location</button>
+            <div class="row center-block header">
+                <button id="logout-button" class="btn btn-thin btn-info md-pull-left button-header">Log Out</button>
+                <button id="change-button" class="btn btn-thin btn-info md-pull-right button-header change">Change name or location</button>
             </div>
             <div class="container row center-block update-form-container">
                 <div class="col-xs-12">
@@ -43,11 +42,12 @@
                             <div class="input-group">
                                 <input type="text" id="location" class="form-control pull-left">
                                 <span class="input-group-btn">
-                           <button id="auto-locate" class="btn btn-info">Auto-Locate</button>
-                        </span>
+                                    <button id="auto-locate" class="btn btn-info">Auto-Locate</button>
+                                </span>
                             </div>
                         </div>
                         <button type="submit" id="submit-button" class="btn btn-info btn-thin center-block">Submit</button>
+                        <img src="assets/images/gps.svg" alt="auto-locate loading indicator" class="gps-svg">
                         <p id="form-submit-message"></p>
                     </form>
                 </div>
@@ -58,29 +58,29 @@
                 </div>
             </div>
             <div class="container row">
-                <div class="col-md-3 pull-left">
+                <div class="col-md-3 col-xs-12 pull-left">
                     <ul class="list-style">
                         <li>
                             <h3>Feeds</h3></li>
                     </ul>
                     <ul class="buttons list-style"></ul>
                 </div>
-                <div class="col-md-6 pull-left">
-                    <h3 class="your-news clearfix">Your News</h3>
+                <div class="col-md-6 col-xs-12 pull-left">
+                    <h3 class="your-news clearfix" id="source-name">Your News</h3>
                     <div class="article"></div>
                 </div>
-                <div class="col-xs-3 pull-right">
+                <div class="col-md-3 col-xs-12 pull-right">
                     <div class="panel panel-default">
                         <div class="panel-heading clearfix">
-                            <h3 class="inline-heading pull-left">Weather</h3>
-                            <h6 class="inline-heading pull-right">Powered by Dark Sky</h6>
+                            <h3 class="inline-heading md-pull-left">Weather</h3>
+                            <h6 class="inline-heading md-pull-right">Powered by Dark Sky</h6>
                         </div>
                         <div class="panel-body">
                             <button id="weather-button" class="btn btn-info btn-thin" type="submit">Get Weather</button>
                             <h4 id="weatherLocation"></h4>
                             <h5 id="weather"></h5>
                             <h5 id="weatherReport"></h5>
-                            <h5 id="precipReport"></h5>
+                            <h5 id="precipitationReport"></h5>
                             <canvas id="icon1" width="128" height="128" class="icon"></canvas>
                         </div>
                     </div>

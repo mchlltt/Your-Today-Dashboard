@@ -1,4 +1,5 @@
 body {
+	/* Back-up color in case of image errors.*/
 	background-color: lightgray;
 	background-image: url("../images/background/old_wall.png");
 	background-size: cover;
@@ -18,8 +19,8 @@ body {
 }
 
 .welcome,
-.change,
-.update-form-container {
+.update-form-container,
+.gps-svg {
 	display: none;
 }
 
@@ -30,6 +31,7 @@ body {
 
 .list-style {
 	list-style: none;
+	padding-left: 0;
 }
 
 .well {
@@ -55,6 +57,8 @@ body {
 
 .container {
 	width: 100%;
+	margin: 0;
+	padding: 0;
 }
 
 .transparency-wrapper {
@@ -89,4 +93,50 @@ body {
 	height: 100%;
 	margin: 0;
 	line-height: 28px;
+}
+
+.gps-svg {
+	clear: none;
+	margin: 0 auto;
+}
+
+.article {
+	min-height: 200px;
+}
+
+@media only screen and (min-width: 641px) {
+	.md-pull-right {
+		float: right;
+	}
+	.md-pull-left {
+		float: left;
+	}
+	.header {
+		padding: 0 15px;
+	}
+}
+
+@media only screen and (max-width: 640px) {
+	.inline-heading {
+		clear: both;
+		margin: 0 auto;
+		display: block;
+		text-align: center;
+		float: none;
+	}
+
+	.button-header {
+		clear: both;
+		margin: 1% auto;
+		float: none;
+		display: block;
+	}
+	.panel-body button {
+		margin: 0 auto;
+		display: block;
+	}
+
+	h4 {
+		text-align: center;
+	}
 }

@@ -24,7 +24,6 @@ $(document).ready(function() {
     // <---- Firebase Set-Up
 
 
-
     // Initialize variables --->
     var email = $('#email').val();
     var password = $('#password').val();
@@ -33,6 +32,7 @@ $(document).ready(function() {
     var location;
     var lat;
     var long;
+    var photoURL;
     var skycons = new Skycons({
         "color": "orange"
     });
@@ -78,6 +78,7 @@ $(document).ready(function() {
         password = '';
         name = '';
         displayName = '';
+        photoURL = '';
         location = '';
         lat = '';
         long = '';
@@ -152,11 +153,14 @@ $(document).ready(function() {
 
         // Check if a location is already known for this email.
         return locations.child(name).once('value', function(snapshot) {
-            console.log(snapshot.val());
             // If so, set the value of the location input to the location.
             if (snapshot.exists()) {
+                lat = snapshot.val().lat;
+                long = snapshot.val().long;
                 location = snapshot.val().location;
+                locationName = snapshot.val().locationName;
                 placeID = snapshot.val().placeID;
+                photoURL = snapshot.val().photoURL;
                 $('#location').val(location);
             }
         });
@@ -184,6 +188,7 @@ $(document).ready(function() {
     // Get location from 'Auto-Locate' button.
     $('#auto-locate').on('click', function() {
         $('#form-submit-message').text('');
+        $('.gps-svg').css('display','block');
         if (navigator.geolocation) {
             // If geolocation is available, hand the results to savePosition.
             navigator.geolocation.getCurrentPosition(savePosition, positionError);
@@ -206,17 +211,20 @@ $(document).ready(function() {
         // Write the truncated coordinates to the location input. 
         // It's precise enough and neater.
         $('#location').val(lat.toFixed(3) + ',' + long.toFixed(3));
+        $('.gps-svg').hide();
     };
 
     // If auto-locate fails, display error text.
     positionError = function() {
-        $('#form-submit-message').text('Error getting address. Try entering your location manually.');
+        $('#form-submit-message').text('Error auto-locating. Please enter your location manually.');
+        $('.gps-svg').hide();
     };
     // <----- Auto-Location
 
 
     // When the form is submitted with the display name and location,
     $('#submit-button').on('click', function() {
+        // Clear out any previous error message.
         $('#form-submit-message').text('');
 
         // Get contents of displayName input.
@@ -250,6 +258,7 @@ $(document).ready(function() {
                     long = results[0].geometry.location.lng();
                     locationName = results[0].formatted_address;
                     placeID = results[0].place_id;
+                    photoURL = '';
 
                     // Write location and lat/long to Firebase.            
                     var locationObj = {};
@@ -262,14 +271,14 @@ $(document).ready(function() {
                     };
                     locations.update(locationObj);
 
+
                     // Hide form and show change button only if geocoding was successful.
                     $('.update-form-container').hide();
                     $('.welcome').show();
                     $('.change').show();
 
                 } else {
-                    // Display a basic error code. Need better handling but this works for now.
-                    console.log("Geocode was not successful for the following reason: " + status);
+                    $('#form-submit-message').text('Your location couldn\'t be found. Try auto-location or a postal code.');
                 }
             });
         }
@@ -292,48 +301,63 @@ $(document).ready(function() {
 
 
     // Listen for changes in location once logged in.
-
-
     // Background image ---->
-    database.ref().on('value', function(snapshot) {
+    locations.on('value', function(snapshot) {
         // If location is defined and length > 0, this means that placeID has been captured.
         if (location !== undefined) {
             if (location.length > 0) {
-                // Fetch header image.
-                var placeIDURL = "https://crossorigin.me/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBsgQ07A5r52jQrex89eg_mSYCoQME2v1g";
-                $.ajax({
-                    url: placeIDURL,
-                    method: 'GET'
-                }).done(
-                    function(response) {
-                        if (response.result.photos !== undefined) {
-                            var reference = response.result.photos[0].photo_reference;
-                            var photoURL = "https://crossorigin.me/https://maps.googleapis.com/maps/api/place/photo?maxwidth=1600&photoreference=" + reference + "&key=AIzaSyBYWYrtTu9U0zgCOTpVKL_WyLsaB365exk";
-                            $('body').css('background-image', 'url(' + photoURL + ')');
-                        } else {
-                            var newTerm = response.result.vicinity;
-                            var geocoderVicinity = new google.maps.Geocoder();
-                            geocoderVicinity.geocode({
-                                'address': newTerm
-                            }, function(results, status) {
-                                // If geocoding was successful,
-                                if (status == google.maps.GeocoderStatus.OK) {
-                                    // Save placeID locally and to Firebase.
-                                    placeID = results[0].place_id;
-                                    var newPlaceIDObj = {};
-                                    newPlaceIDObj[name] = {
-                                        location: location,
-                                        locationName: locationName,
-                                        placeID: placeID,
-                                        lat: lat,
-                                        long: long
-                                    };
-                                    locations.update(newPlaceIDObj);
-                                }
-                            });
+                if (photoURL === undefined || photoURL.length === 0) {
+                    // Fetch image by placeid.
+                    var placeIDURL = "https://jsonp.afeld.me/?url=https%3A%2F%2Fmaps.googleapis.com%2Fmaps%2Fapi%2Fplace%2Fdetails%2Fjson%3Fplaceid%3D" + placeID + "%26key%3DAIzaSyBsgQ07A5r52jQrex89eg_mSYCoQME2v1g";
+                    $.ajax({
+                        url: placeIDURL,
+                        method: 'GET'
+                    }).done(
+                        function(response) {
+                            // If you get a response in which the photos array isn't empty, set the background image's src to the URL on the first image.
+                            if (response.result.photos !== undefined) {
+                                var reference = response.result.photos[0].photo_reference;
+                                photoURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=1600&photoreference=" + reference + "&key=AIzaSyBYWYrtTu9U0zgCOTpVKL_WyLsaB365exk";
+                                $('body').css('background-image', 'url(' + photoURL + ')');
+                                var newPhotoURLObj = {};
+                                newPhotoURLObj[name] = {
+                                    location: location,
+                                    locationName: locationName,
+                                    placeID: placeID,
+                                    lat: lat,
+                                    long: long,
+                                    photoURL: photoURL
+                                };
+                                locations.update(newPhotoURLObj);
+                            } else {
+                                // Otherwise, we're going to look for a more broad location.
+                                var newTerm = response.result.vicinity;
+                                var geocoderVicinity = new google.maps.Geocoder();
+                                geocoderVicinity.geocode({
+                                    'address': newTerm
+                                }, function(results, status) {
+                                    // If geocoding was successful,
+                                    if (status == google.maps.GeocoderStatus.OK) {
+                                        // Save placeID locally and to Firebase.
+                                        placeID = results[0].place_id;
+                                        var newPlaceIDObj = {};
+                                        newPlaceIDObj[name] = {
+                                            location: location,
+                                            locationName: locationName,
+                                            placeID: placeID,
+                                            lat: lat,
+                                            long: long
+                                        };
+                                        locations.update(newPlaceIDObj);
+                                    }
+                                });
+                            }
                         }
-                    }
-                );
+                    );
+                } else {
+                    // Unless we already have the photoURL from Firebase, in which case just use that.
+                    $('body').css('background-image', 'url(' + photoURL + ')');
+                }
             }
         }
     });
@@ -348,9 +372,8 @@ $(document).ready(function() {
         $.getJSON(url + apiKey + "/" + lat + "," + long + "?callback=?", function(data) {
             $('#weatherLocation').text('The weather for ' + locationName);
             $('#weather').text('Current temperature: ' + data.currently.temperature + ' °F');
-            $('#weatherReport').text('Next Hour:' + data.currently.summary);
-            $('#summary').html(data.currently.summary);
-            $('#precipProb').html(data.currently.precipProbability);
+            $('#weatherReport').text('Next Hour: ' + data.currently.summary);
+            $('#precipitationReport').text('Chance of precipitation: ' + data.currently.precipProbability * 100 + '%');
             var icon = data.currently.icon;
             icon.toUpperCase();
             skycons.set('icon1', icon);
