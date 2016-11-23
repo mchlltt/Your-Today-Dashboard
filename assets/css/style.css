@@ -83,3 +83,10 @@ body {
 .panel-default, .panel-heading {
 	background: none;
 }
+
+.inline-heading {
+	clear: none;
+	height: 100%;
+	margin: 0;
+	line-height: 28px;
+}

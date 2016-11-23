@@ -67,6 +67,9 @@ $(document).ready(function() {
 
         // Set background image to logged out default.
         $('body').css('background-image', '../images/background/old_wall.png')
+
+        // Make sure any welcome message content is erased.
+        $('hello').empty();
     };
 
     clearUserData = function() {
@@ -80,7 +83,7 @@ $(document).ready(function() {
         long = '';
     };
 
-    // What to do when the user is or becomes authenticated..
+    // What to do when the user is or becomes authenticated.
     afterLogIn = function(firebaseUser) {
         // Hide the login section.
         $('.login').hide();
@@ -346,6 +349,8 @@ $(document).ready(function() {
             $('#weatherLocation').text('The weather for ' + locationName);
             $('#weather').text('Current temperature: ' + data.currently.temperature + ' °F');
             $('#weatherReport').text('Next Hour:' + data.currently.summary);
+            $('#summary').html(data.currently.summary);
+            $('#precipProb').html(data.currently.precipProbability);
             var icon = data.currently.icon;
             icon.toUpperCase();
             skycons.set('icon1', icon);

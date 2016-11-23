@@ -70,13 +70,20 @@
                     <div class="article"></div>
                 </div>
                 <div class="col-xs-3 pull-right">
-                    <h3>Weather</h3> 
-                    <h6>Powered by Dark Sky</h6>
-                    <button id="weather-button" class="btn btn-info" type="submit">Get Weather</button>
-                    <h4 id="weatherLocation"></h5>
-                    <h5 id="weather"></h5>
-                    <h5 id="weatherReport"></h5>
-                    <canvas id="icon1" width="128" height="128" class="icon"></canvas>
+                    <div class="panel panel-default">
+                        <div class="panel-heading clearfix">
+                            <h3 class="inline-heading pull-left">Weather</h3>
+                            <h6 class="inline-heading pull-right">Powered by Dark Sky</h6>
+                        </div>
+                        <div class="panel-body">
+                            <button id="weather-button" class="btn btn-info btn-thin" type="submit">Get Weather</button>
+                            <h4 id="weatherLocation"></h4>
+                            <h5 id="weather"></h5>
+                            <h5 id="weatherReport"></h5>
+                            <h5 id="precipReport"></h5>
+                            <canvas id="icon1" width="128" height="128" class="icon"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
