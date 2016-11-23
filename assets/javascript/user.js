@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function() {
 
     // Firebase Set-Up ---->
     // Configure and initialize Firebase.
@@ -24,7 +24,6 @@ $(document).ready(function () {
     // <---- Firebase Set-Up
 
 
-
     // Initialize variables --->
     var email = $('#email').val();
     var password = $('#password').val();
@@ -33,6 +32,7 @@ $(document).ready(function () {
     var location;
     var lat;
     var long;
+    var photoURL;
     var skycons = new Skycons({
         "color": "orange"
     });
@@ -40,8 +40,73 @@ $(document).ready(function () {
 
 
     // Authentication ---->
+    // Realtime authentication state listener.
+    // This will run on pageload and then anytime the auth state changes.
+    auth.onAuthStateChanged(function(firebaseUser) {
+        // If you are logged in,
+        if (firebaseUser) {
+            // Update variables and DOM based on user that is logged in.
+            afterLogIn(firebaseUser);
+        } else {
+            // Logged out view.
+            showLoggedOutSite();
+            // Clear any data variables.
+            clearUserData();
+        }
+    });
+
+    showLoggedOutSite = function() {
+        // Some of this may already be true, but since we are simultaneously accounting 
+        // for on-pageload and on-signout, we are a bit more verbose.
+
+        // Hide logged in only content.
+        $('.logged-in').hide();
+
+        // Make sure the login box is showing.
+        $('.login').show();
+
+        // Set background image to logged out default.
+        $('body').css('background-image', '../images/background/old_wall.png')
+
+        // Make sure any welcome message content is erased.
+        $('hello').empty();
+    };
+
+    clearUserData = function() {
+        // Reset variables. Some of this may already be true, but we want to be careful.
+        email = '';
+        password = '';
+        name = '';
+        displayName = '';
+        photoURL = '';
+        location = '';
+        lat = '';
+        long = '';
+    };
+
+    // What to do when the user is or becomes authenticated.
+    afterLogIn = function(firebaseUser) {
+        // Hide the login section.
+        $('.login').hide();
+        // Show the logged in site.
+        $('.logged-in').show();
+
+        // Clear out any email/password values.
+        // We do this here instead of after login-button click
+        // because we do not want to delete their info if the login fails.
+        $('#email').val('');
+        $('#password').val('');
+
+        // name is a temporary workaround for username, because an email address cannot be a variable name in Firebase.
+        // This wouldn't work in a scaled application, but with our set-up, it does.
+        name = firebaseUser.email.split('@')[0];
+
+        // Check whether we need displayName and location from the user.
+        $.when(isUserInfoNeeded()).done(showForm);
+    };
+
     // On login-button click.
-    $('#login-button').on('click', function (e) {
+    $('#login-button').on('click', function(e) {
 
         // Get email & password.
         email = $('#email').val();
@@ -51,7 +116,8 @@ $(document).ready(function () {
         var promise = auth.signInWithEmailAndPassword(email, password);
 
         // If it fails, log the error message.
-        promise.catch(function (e) {
+        // TODO: Depending on error message, let the user know what happened.
+        promise.catch(function(e) {
             console.log(e.message);
         });
 
@@ -59,63 +125,26 @@ $(document).ready(function () {
         return false;
     });
 
+
     // On logout-button click.
-    $('#logout-button').on('click', function () {
-        // Sign out.
+    $('#logout-button').on('click', function() {
+        // Sign out. The auth listener will handle the rest.
         auth.signOut();
 
-        // Hide/show buttons.
-        $('.login-form').show();
-        $('#logout-button').addClass('hide');
-        $('#login-button').show();
-        $('.welcome').hide();
-        $('.change').hide();
-
-        // Reset variables
-        email = $('#email').val();
-        password = $('#password').val();
-        name = '';
-        displayName = '';
-        location = '';
-        lat = '';
-        long = '';
-
+        // Don't refresh.
+        return false;
     });
-
-    // Realtime authentication state listener.
-    auth.onAuthStateChanged(function (firebaseUser) {
-        if (firebaseUser) {
-            // Log that you are logged in.
-            console.log("You are logged in as: ", firebaseUser);
-            // Do successful log-in stuff.
-            afterLogIn(firebaseUser);
-        } else {
-            // Log that you are not logged in.
-            console.log("you are NOT logged in");
-        }
-    });
-
-    // What to do when authentication is successful.
-    afterLogIn = function (firebaseUser) {
-        // Hide/show buttons.
-        $('.login-form').hide();
-        $('#email').val('');
-        $('#password').val('');
-        $('#login-button').hide();
-        $('#logout-button').removeClass('hide');
-        name = firebaseUser.email.split('@')[0];
-
-        // Check whether you need to show the form.
-        $.when(isUserInfoNeeded()).done(showForm);
-    };
     // <---- Authentication
 
 
-    // Check whether we have the form inputs already.
-    isUserInfoNeeded = function () {
+    // Page Element Logic ----->
+
+    // Check whether we need displayName or location.
+    isUserInfoNeeded = function() {
 
         // Check if a display name is already known for this email.
-        displayNames.child(name).once('value', function (snapshot) {
+        displayNames.child(name).once('value', function(snapshot) {
+            // If so, set the value of the displayName input to the displayName.
             if (snapshot.exists()) {
                 displayName = snapshot.val().displayName;
                 $('#displayName').val(displayName);
@@ -123,61 +152,81 @@ $(document).ready(function () {
         });
 
         // Check if a location is already known for this email.
-        return locations.child(name).once('value', function (snapshot) {
+        return locations.child(name).once('value', function(snapshot) {
+            // If so, set the value of the location input to the location.
             if (snapshot.exists()) {
+                lat = snapshot.val().lat;
+                long = snapshot.val().long;
                 location = snapshot.val().location;
+                locationName = snapshot.val().locationName;
+                placeID = snapshot.val().placeID;
+                photoURL = snapshot.val().photoURL;
                 $('#location').val(location);
             }
         });
     };
 
     // If we found that we have a display name and location already, hide the form.
-    showForm = function () {
+    showForm = function() {
         if (displayName === undefined || location === undefined) {
-            $('.form').show();
+            $('.update-form-container').show();
         } else {
+            updateDisplayName();
             $('.welcome').show();
             $('.change').show();
         }
     };
 
-    $('#change-button').on('click', function () {
-        $('.form').show();
+    $('#change-button').on('click', function() {
+        $('.update-form-container').show();
         $('.welcome').hide();
         $('.change').hide();
     });
 
+
+    // Auto-Location ---->
     // Get location from 'Auto-Locate' button.
-    $('#auto-locate').on('click', function () {
+    $('#auto-locate').on('click', function() {
+        $('#form-submit-message').text('');
+        $('.gps-svg').css('display','block');
         if (navigator.geolocation) {
-            // Hand the results to savePosition.
+            // If geolocation is available, hand the results to savePosition.
             navigator.geolocation.getCurrentPosition(savePosition, positionError);
         } else {
-            // Very basic error handling for now. Indicates browser incompatibility.
-            console.log('Geolocation not possible.');
+            // Since the response is the same in both cases -- asking the user to
+            // enter their location manually, use the same error handler for a failed
+            // geolocation as for geolocation being unavailable.
+            positionError();
         }
 
         // Don't refresh.
         return false;
     });
 
-    // If auto-locate is successful, write it to the location input..
-    savePosition = function (position) {
+    // If auto-locate is successful, write it to the location input.
+    savePosition = function(position) {
         lat = position.coords.latitude;
         long = position.coords.longitude;
 
-        // Write the truncated coordinates to the location input.
+        // Write the truncated coordinates to the location input. 
+        // It's precise enough and neater.
         $('#location').val(lat.toFixed(3) + ',' + long.toFixed(3));
+        $('.gps-svg').hide();
     };
 
     // If auto-locate fails, display error text.
-    positionError = function () {
-        $('#form-submit-message').text('Error getting address.');
+    positionError = function() {
+        $('#form-submit-message').text('Error auto-locating. Please enter your location manually.');
+        $('.gps-svg').hide();
     };
+    // <----- Auto-Location
 
 
     // When the form is submitted with the display name and location,
-    $('#submit-button').on('click', function () {
+    $('#submit-button').on('click', function() {
+        // Clear out any previous error message.
+        $('#form-submit-message').text('');
+
         // Get contents of displayName input.
         displayName = $('#displayName').val();
 
@@ -201,7 +250,7 @@ $(document).ready(function () {
             // Geocode location input.
             geocoder.geocode({
                 'address': location
-            }, function (results, status) {
+            }, function(results, status) {
                 // If geocoding was successful,
                 if (status == google.maps.GeocoderStatus.OK) {
                     // Save latitude and longitude.
@@ -209,6 +258,7 @@ $(document).ready(function () {
                     long = results[0].geometry.location.lng();
                     locationName = results[0].formatted_address;
                     placeID = results[0].place_id;
+                    photoURL = '';
 
                     // Write location and lat/long to Firebase.            
                     var locationObj = {};
@@ -221,17 +271,14 @@ $(document).ready(function () {
                     };
                     locations.update(locationObj);
 
+
                     // Hide form and show change button only if geocoding was successful.
-                    $('.form').hide();
+                    $('.update-form-container').hide();
                     $('.welcome').show();
                     $('.change').show();
 
-                    // Display success message.
-                    console.log('Name and location set!');
-
                 } else {
-                    // Display a basic error code. Need better handling but this works for now.
-                    console.log("Geocode was not successful for the following reason: " + status);
+                    $('#form-submit-message').text('Your location couldn\'t be found. Try auto-location or a postal code.');
                 }
             });
         }
@@ -240,57 +287,102 @@ $(document).ready(function () {
     });
 
 
-    // Listen for changes in name once logged in.
-    displayNames.on('value', function (snapshot) {
+    updateDisplayName = function() {
+        $('#hello').text('Hello ' + displayName + '!');
+    };
+
+    // Listen for displayName initial value and changes.
+    database.ref().on('value', function(snapshot) {
+        // Name becomes defined once there is successful authentication.
         if (name !== undefined) {
-            displayName = snapshot.child(name).val().displayName;
-            $('#hello').text('Hello ' + displayName + '!');
+            updateDisplayName(snapshot);
         }
     });
 
 
     // Listen for changes in location once logged in.
-    locations.on('value', function (snapshot) {
+    // Background image ---->
+    locations.on('value', function(snapshot) {
+        // If location is defined and length > 0, this means that placeID has been captured.
         if (location !== undefined) {
-            lat = snapshot.child(name).val().lat;
-            long = snapshot.child(name).val().long;
-            locationName = snapshot.child(name).val().locationName;
-
-            // Fetch header image.
-
-            var placeID = snapshot.child(name).val().placeID;
-            var placeIDURL = "https://crossorigin.me/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBsgQ07A5r52jQrex89eg_mSYCoQME2v1g";
-            $.ajax({
-                url: placeIDURL,
-                method: 'GET'
-            }).done(
-                function(response) {
-                    var reference = response.result.photos[0].photo_reference;
-                    var photoURL = "https://crossorigin.me/https://maps.googleapis.com/maps/api/place/photo?maxwidth=1600&photoreference=" + reference + "&key=AIzaSyBYWYrtTu9U0zgCOTpVKL_WyLsaB365exk";
-                    $('body').css('background-image','url(' + photoURL + ')');
+            if (location.length > 0) {
+                if (photoURL === undefined || photoURL.length === 0) {
+                    // Fetch image by placeid.
+                    var placeIDURL = "https://jsonp.afeld.me/?url=https%3A%2F%2Fmaps.googleapis.com%2Fmaps%2Fapi%2Fplace%2Fdetails%2Fjson%3Fplaceid%3D" + placeID + "%26key%3DAIzaSyBsgQ07A5r52jQrex89eg_mSYCoQME2v1g";
+                    $.ajax({
+                        url: placeIDURL,
+                        method: 'GET'
+                    }).done(
+                        function(response) {
+                            // If you get a response in which the photos array isn't empty, set the background image's src to the URL on the first image.
+                            if (response.result.photos !== undefined) {
+                                var reference = response.result.photos[0].photo_reference;
+                                photoURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=1600&photoreference=" + reference + "&key=AIzaSyBYWYrtTu9U0zgCOTpVKL_WyLsaB365exk";
+                                $('body').css('background-image', 'url(' + photoURL + ')');
+                                var newPhotoURLObj = {};
+                                newPhotoURLObj[name] = {
+                                    location: location,
+                                    locationName: locationName,
+                                    placeID: placeID,
+                                    lat: lat,
+                                    long: long,
+                                    photoURL: photoURL
+                                };
+                                locations.update(newPhotoURLObj);
+                            } else {
+                                // Otherwise, we're going to look for a more broad location.
+                                var newTerm = response.result.vicinity;
+                                var geocoderVicinity = new google.maps.Geocoder();
+                                geocoderVicinity.geocode({
+                                    'address': newTerm
+                                }, function(results, status) {
+                                    // If geocoding was successful,
+                                    if (status == google.maps.GeocoderStatus.OK) {
+                                        // Save placeID locally and to Firebase.
+                                        placeID = results[0].place_id;
+                                        var newPlaceIDObj = {};
+                                        newPlaceIDObj[name] = {
+                                            location: location,
+                                            locationName: locationName,
+                                            placeID: placeID,
+                                            lat: lat,
+                                            long: long
+                                        };
+                                        locations.update(newPlaceIDObj);
+                                    }
+                                });
+                            }
+                        }
+                    );
+                } else {
+                    // Unless we already have the photoURL from Firebase, in which case just use that.
+                    $('body').css('background-image', 'url(' + photoURL + ')');
                 }
-            );
+            }
         }
     });
+    // <---- Background image.
 
-    // Fetch weather.
-    $('#weather-button').on('click', function () {
+
+    // Fetch weather ---->
+    $('#weather-button').on('click', function() {
         var apiKey = '0b3cbdf73e99584a55eddd1b6bd851f6';
         var url = 'https://api.forecast.io/forecast/';
 
-        $.getJSON(url + apiKey + "/" + lat + "," + long + "?callback=?", function (data) {
-            // console.log(data);
-            $('#weatherLocation').html('The weather for ' + locationName);
-            $('#weather').html('The temperature: ' + data.currently.temperature + ' °F');
-            $('#summary').html(data.currently.summary);
+        $.getJSON(url + apiKey + "/" + lat + "," + long + "?callback=?", function(data) {
+            $('#weatherLocation').text('The weather for ' + locationName);
+            $('#weather').text('Current temperature: ' + data.currently.temperature + ' °F');
+            $('#weatherReport').text('Next Hour: ' + data.currently.summary);
+            $('#precipitationReport').text('Chance of precipitation: ' + data.currently.precipProbability * 100 + '%');
             var icon = data.currently.icon;
             icon.toUpperCase();
             skycons.set('icon1', icon);
             skycons.play();
         });
-        //https://api.forecast.io/forecast/0b3cbdf73e99584a55eddd1b6bd851f6
 
         return false;
 
     });
+    // <---- Fetch weather.
+
 });

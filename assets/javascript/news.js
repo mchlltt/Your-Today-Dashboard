@@ -1,5 +1,9 @@
 $(document).ready(function () {
-    var qurl = "";
+    // Initialize qurl and sourceIndex variables.
+    var qurl;
+    var sourceIndex;
+
+    // News sources and their News API URLs.
     var news = [{
         source: "Ars Technica",
         url: "https://newsapi.org/v1/articles?source=ars-technica&sortBy=top&apiKey=3e7d2dc0d0f743f2977afde6e24105ea"
@@ -59,7 +63,7 @@ $(document).ready(function () {
         url: "https://newsapi.org/v1/articles?source=national-geographic&sortBy=top&apiKey=3e7d2dc0d0f743f2977afde6e24105ea"
     }, {
         source: "The New York Times",
-        url: "https://newsapi.org/v1/articles?source=the-new-york-times&sortBy=popular&apiKey=3e7d2dc0d0f743f2977afde6e24105ea"
+        url: "https://newsapi.org/v1/articles?source=the-new-york-times&sortBy=top&apiKey=3e7d2dc0d0f743f2977afde6e24105ea"
     }, {
         source: "The Verge",
         url: "https://newsapi.org/v1/articles?source=the-verge&sortBy=top&apiKey=3e7d2dc0d0f743f2977afde6e24105ea"
@@ -71,15 +75,15 @@ $(document).ready(function () {
         url: "https://newsapi.org/v1/articles?source=time&sortBy=top&apiKey=3e7d2dc0d0f743f2977afde6e24105ea"
     }];
 
-    makeNewsSources();
-    linkClick();
+    // Make buttons on pageload.
+    makeNewsSourceButtons();
 
     // Generate news sources on the left column
-    function makeNewsSources() {
+    function makeNewsSourceButtons() {
         for (var i = 0; i < news.length; i++) {
             var b = $('<div>').addClass('linkSource');
             var a = $('<a>').attr({
-                'class': 'linkSource',
+                'class': 'btnSource',
                 'data-index': i
             });
             a.html(news[i].source);
@@ -88,19 +92,20 @@ $(document).ready(function () {
         }
     }
 
-    var sourceIndex;
-    // sets up click event listener for news source
+
+    // Event listner for when buttons are clicked.
+    $(document).on('click', '.btnSource', linkClick);
+
+    // Response to buttons being clicked.
     function linkClick() {
-        $(document).on('click', '.linkSource', function () {
-            sourceIndex = $(this).data('index');
-            $('.article').empty();
-            $('.article').html('Loading...').addClass('your-news');
-            $('.your-news').html('<h3>Your News: ' + news[sourceIndex].source + '</h3>');
-            getNews();
-        });
+        sourceIndex = $(this).data('index');
+        $('.article').empty();
+        $('.article').append('<img src="assets/images/loading.svg" alt="loading spinner" class="center-block">');
+        $('#source-name').text('Your News: ' + news[sourceIndex].source);
+        getNews();
     }
 
-    // makes API call and populates news div
+    // API call and article div population.
     function getNews() {
         qurl = news[sourceIndex].url;
         $.ajax({
@@ -109,14 +114,19 @@ $(document).ready(function () {
         }).done(function (data) {
             $('.article').empty();
             for (var i = 0; i < 3; i++) {
-                var f = $('<div class="col-md-12 col-sm-12 col-xs-12">');
-                var a = $('<h3>').html(data.articles[i].title);
-                var b = $('<p>').html(data.articles[i].description);
-                var e = $('<a href="' + data.articles[i].url + '" target="blank"></a>').html('Read more');
-                var c = $('<img src="' + data.articles[i].urlToImage + '"/><hr/>');
-                c.addClass('img-responsive img-rounded mx-auto');
-                f.append(a, b, e, c);
-                $('.article').append(f);
+                var row = $('<div class="row your-news">');
+                var column = $('<div class="col-xs-12">');
+                var heading = $('<h3>').html(data.articles[i].title);
+                var description = $('<p>').html(data.articles[i].description);
+                var link = $('<a href="' + data.articles[i].url + '" target="blank"></a>').html('Read more');
+                row.append(column);
+                column.append(heading, description, link);
+                if (data.articles[i].urlToImage !== null) {
+                    image = $('<img src="' + data.articles[i].urlToImage + '" onerror="this.style.display=\'none\'"/><hr/>');
+                    image.addClass('img-responsive img-rounded mx-auto');
+                    column.append(image);
+                }
+                $('.article').append(row);
             }
         });
     }

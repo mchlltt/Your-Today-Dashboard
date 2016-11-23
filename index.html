@@ -12,89 +12,77 @@
     <script src="https://rawgithub.com/darkskyapp/skycons/master/skycons.js"></script>
     <script src="assets/javascript/user.js"></script>
     <script src="assets/javascript/news.js"></script>
-    <script src="assets/javascript/weather.js"></script>
 </head>
 
 <body>
     <div class="transparency-wrapper">
-        <div class="row center-block">
-            <div class="col-xs-12 login-form">
-                <div class="row col-xs-3">
-                    <label for="email">Email</label>
-                    <input id="email" type="email" placeholder="Email">
-                </div>
-                <div class="row col-xs-3">
-                    <label for="password">Password</label>
-                    <input id="password" type="password" placeholder="password">
-                </div>
-                <div class="col-xs-3">
-                    <button id="login-button" class="btn btn-action btn-thin">Log In</button>
-                </div>
+        <div class="row center-block login">
+            <div class="col-xs-12 login-form center-block">
+                <label for="email">Email</label>
+                <input id="email" type="email" placeholder="Email" class="form-control">
+                <label for="password">Password</label>
+                <input id="password" type="Password" placeholder="password" class="form-control">
+                <button id="login-button" class="btn btn-action btn-thin btn-info">Log In</button>
             </div>
-            <button id="logout-button" class="btn btn-action hide btn-thin">Log Out</button>
         </div>
-        <div class="container row center-block">
-            <div class="col-xs-12">
-                <form class="center-block form">
-                    <div class="form-group">
-                        <label for="displayName">Your Name</label>
-                        <input type="text" id="displayName" class="form-control">
-                    </div>
-                    <div class="input-group">
-                        <label for="location">Location</label>
-                        <div class="input-group">
-                            <input type="text" id="location" class="form-control pull-left">
-                            <span class="input-group-btn">
-                            d<button id="auto-locate" class="btn btn-info">Auto-Locate</button>
-                        </span>
+        <div class="logged-in">
+            <div class="row center-block header">
+                <button id="logout-button" class="btn btn-thin btn-info md-pull-left button-header">Log Out</button>
+                <button id="change-button" class="btn btn-thin btn-info md-pull-right button-header change">Change name or location</button>
+            </div>
+            <div class="container row center-block update-form-container">
+                <div class="col-xs-12">
+                    <form class="center-block update-form">
+                        <div class="form-group">
+                            <label for="displayName">Your Name</label>
+                            <input type="text" id="displayName" class="form-control">
                         </div>
-                    </div>
-                    <button type="submit" id="submit-button" class="btn btn-info">Submit</button>
-                    <p id="form-submit-message"></p>
-                </form>
-            </div>
-        </div>
-        <div class="row welcome">
-            <div class="col-xs-12">
-                <h2 id="hello"></h2>
-            </div>
-        </div>
-        <div class="row change">
-            <div class="col-xs-12">
-                <button class="btn btn-info center-block" id="change-button">Change name or location.</button>
-            </div>
-        </div>
-        <div class="container row center-block">
-            <div class="col-md-3">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3>Feeds</h3>
-                    </div>
-                    <div class="panel-body buttons"></div>
-                </div>
-            </div> 
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel panel-heading">
-                        <h3 class="your-news">Your News</h3>
-                    </div>
-                    <div class="panel panel-body">
-                        <div class="article"></div>
-                    </div>
+                        <div class="input-group">
+                            <label for="location">Location</label>
+                            <div class="input-group">
+                                <input type="text" id="location" class="form-control pull-left">
+                                <span class="input-group-btn">
+                                    <button id="auto-locate" class="btn btn-info">Auto-Locate</button>
+                                </span>
+                            </div>
+                        </div>
+                        <button type="submit" id="submit-button" class="btn btn-info btn-thin center-block">Submit</button>
+                        <img src="assets/images/gps.svg" alt="auto-locate loading indicator" class="gps-svg">
+                        <p id="form-submit-message"></p>
+                    </form>
                 </div>
             </div>
-            <div class="col-xs-3">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3>Weather</h3>
-                    </div>
-                    <div class="panel-body">
-                        <button id="weather-button" class="btn" type="submit">Get Weather</button>
-                        <h5 id="weatherLocation"></h5>
-                        <h5 id="weather">Weather Report:</h5>
-                        <div class="weatherReport">Next Hour: <span id="summary"></span></div>
-                        <canvas id="icon1" width="128" height="128"></canvas>
-                        <h6>Powered by Dark Sky</h6>
+            <div class="row welcome center-block">
+                <div class="col-xs-12">
+                    <h2 id="hello" class="text-center"></h2>
+                </div>
+            </div>
+            <div class="container row">
+                <div class="col-md-3 col-xs-12 pull-left">
+                    <ul class="list-style">
+                        <li>
+                            <h3>Feeds</h3></li>
+                    </ul>
+                    <ul class="buttons list-style"></ul>
+                </div>
+                <div class="col-md-6 col-xs-12 pull-left">
+                    <h3 class="your-news clearfix" id="source-name">Your News</h3>
+                    <div class="article"></div>
+                </div>
+                <div class="col-md-3 col-xs-12 pull-right">
+                    <div class="panel panel-default">
+                        <div class="panel-heading clearfix">
+                            <h3 class="inline-heading md-pull-left">Weather</h3>
+                            <h6 class="inline-heading md-pull-right">Powered by Dark Sky</h6>
+                        </div>
+                        <div class="panel-body">
+                            <button id="weather-button" class="btn btn-info btn-thin" type="submit">Get Weather</button>
+                            <h4 id="weatherLocation"></h4>
+                            <h5 id="weather"></h5>
+                            <h5 id="weatherReport"></h5>
+                            <h5 id="precipitationReport"></h5>
+                            <canvas id="icon1" width="128" height="128" class="icon"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
