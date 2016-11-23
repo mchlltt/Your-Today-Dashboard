@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // Initialize qurl and sourceIndex variables.
     var qurl;
     var sourceIndex;
@@ -111,7 +111,7 @@ $(document).ready(function() {
         $.ajax({
             url: qurl,
             method: 'GET'
-        }).done(function(data) {
+        }).done(function (data) {
             $('.article').empty();
             for (var i = 0; i < 3; i++) {
                 var row = $('<div class="row your-news">');
@@ -122,9 +122,9 @@ $(document).ready(function() {
                 row.append(column);
                 column.append(heading, description, link);
                 if (data.articles[i].urlToImage !== null) {
-                   image = $('<img src="' + data.articles[i].urlToImage + '" onerror="this.style.display=\'none\'"/><hr/>');
-                   image.addClass('img-responsive img-rounded mx-auto');
-                   column.append(image);
+                    image = $('<img src="' + data.articles[i].urlToImage + '" onerror="this.style.display=\'none\'"/><hr/>');
+                    image.addClass('img-responsive img-rounded mx-auto');
+                    column.append(image);
                 }
                 $('.article').append(row);
             }
