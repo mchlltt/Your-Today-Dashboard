@@ -347,7 +347,7 @@ $(document).ready(function() {
             // If we don't have photoURL yet, get it.
             if (photoURL === undefined || photoURL.length === 0) {
                 // Fetch image by placeid.
-                var placeIDURL = "https://cors.io/?https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBsgQ07A5r52jQrex89eg_mSYCoQME2v1g";
+                var placeIDURL = "https://crossorigin.me/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBsgQ07A5r52jQrex89eg_mSYCoQME2v1g";
                 $.getJSON({
                     url: placeIDURL,
                 }).done(
