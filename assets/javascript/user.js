@@ -76,6 +76,7 @@ $(document).ready(function() {
         $('.weather-details').empty();
         $('#icon1').hide();
         $('.article').empty();
+        $('#source-name').text('Your News');
     };
 
     // Reset variables. Some of this may already be true, but we want to be careful.
