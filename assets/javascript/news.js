@@ -117,15 +117,21 @@ $(document).ready(function () {
                 var row = $('<div class="row your-news center-block">');
                 var column = $('<div class="col-xs-12 center-block">');
                 var heading = $('<h3>').html(data.articles[i].title);
+                var headingLink = $('<a href="' + data.articles[i].url + '" target="_blank" class="plain-link">').html(heading);
                 var description = $('<p>').html(data.articles[i].description);
-                var link = $('<a href="' + data.articles[i].url + '" target="blank"></a>').html('Read more');
+                var readMoreLink = $('<a href="' + data.articles[i].url + '" target="_blank"></a>').html('Read more');
                 row.append(column);
-                column.append(heading, description, link);
+                column.append(headingLink, description, readMoreLink);
+                // Only attempt to display images when there is an image URL.
                 if (data.articles[i].urlToImage !== null) {
-                    image = $('<img src="' + data.articles[i].urlToImage + '" onerror="this.style.display=\'none\'"/><hr/>');
+                    var imageLink = $('<a href="' + data.articles[i].url + '" target="_blank">');
+                    // `onerror` avoids a broken image icon when the image cannot load.
+                    var image = $('<img src="' + data.articles[i].urlToImage + '" onerror="this.style.display=\'none\'"/>');
+                    imageLink.append(image);
                     image.addClass('img-responsive img-rounded mx-auto');
-                    column.append(image);
+                    column.append(imageLink);
                 }
+                column.append('<hr>');
                 $('.article').append(row);
             }
         });

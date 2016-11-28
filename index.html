@@ -4,10 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-OvY8uwgdrNLTUgJ1VoTpyowRQ3o75LU&libraries=places"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
     <script src="https://rawgithub.com/darkskyapp/skycons/master/skycons.js"></script>
     <script src="assets/javascript/user.js"></script>
@@ -16,83 +18,82 @@
 
 <body>
     <div class="transparency-wrapper">
-        <div class="row center-block login">
-            <div class="col-xs-12 login-form center-block">
-                <label for="email">Email</label>
-                <input id="email" type="email" placeholder="Email" class="form-control">
-                <label for="password">Password</label>
-                <input id="password" type="Password" placeholder="password" class="form-control">
-                <button id="login-button" class="btn btn-action btn-thin btn-info">Log In</button>
+        <div class="content">
+            <div class="headline logged-out text-center">
+                    <h1>Your Today Dashboard</h1>
             </div>
-        </div>
-        <div class="logged-in">
-            <div class="row center-block header">
-                <button id="logout-button" class="btn btn-thin btn-info md-pull-left button-header">Log Out</button>
-                <button id="change-button" class="btn btn-thin btn-info md-pull-right button-header change">Change name or location</button>
-            </div>
-            <div class="container row center-block update-form-container">
-                <div class="col-xs-12">
-                    <form class="center-block update-form">
-                        <div class="form-group">
-                            <label for="displayName">Your Name</label>
-                            <input type="text" id="displayName" class="form-control">
-                        </div>
-                        <div class="input-group">
-                            <label for="location">Location</label>
-                            <div class="input-group">
-                                <input type="text" id="location" class="form-control pull-left">
-                                <span class="input-group-btn">
-                                    <button id="auto-locate" class="btn btn-info">Auto-Locate</button>
-                                </span>
-                            </div>
-                        </div>
-                        <button type="submit" id="submit-button" class="btn btn-info btn-thin center-block">Submit</button>
-                        <img src="assets/images/gps.svg" alt="auto-locate loading indicator" class="gps-svg">
-                        <p id="form-submit-message"></p>
+            <div class="row center-block login logged-out">
+                <div class="col-xs-12 login-form center-block">
+                    <form>
+                        <label for="email">Email</label>
+                        <input id="email" type="email" placeholder="Email" class="form-control">
+                        <label for="password">Password</label>
+                        <input id="password" type="Password" placeholder="password" class="form-control">
+                        <button id="login-button" class="btn btn-action btn-thin btn-info center-block" data-toggle="popover" data-content="Error logging in. Please check your username and password and try again." data-trigger="manual" data-placement="auto bottom">Log In</button>
                     </form>
                 </div>
             </div>
-            <div class="row welcome center-block">
-                <div class="col-xs-12">
-                    <h2 id="hello" class="text-center"></h2>
+            <div class="logged-in">
+                <div class="row center-block header">
+                    <button id="logout-button" class="btn btn-thin btn-info md-pull-left button-header">Log Out</button>
+                    <h2 id="hello" class="text-center welcome button-header"></h2>
+                    <button id="change-button" class="btn btn-thin btn-info md-pull-right button-header change">Change name or location</button>
                 </div>
-            </div>
-            <div class="container row">
-                <div class="col-md-3 col-xs-12 pull-left">
-                    <div class="panel panel-info">
-                        <div class="panel-heading clearfix">
-                            <ul class="list-style">
-                                <li><h3>Feeds</h3></li>
-                            </ul>
-                        </div>
-                        <div class="panel-body">
-                            <ul class="buttons list-style"></ul>
-                        </div>
+                <div class="container row center-block update-form-container">
+                    <div class="col-xs-12">
+                        <form class="center-block update-form">
+                            <div class="form-group">
+                                <label for="displayName">Your Name</label>
+                                <input type="text" id="displayName" class="form-control change-input">
+                            </div>
+                            <div class="input-group">
+                                <label for="location">Location</label>
+                                <div class="input-group">
+                                    <input type="text" id="location" class="form-control pull-left change-input">
+                                    <span class="input-group-btn">
+                                        <button id="auto-locate" class="btn btn-info" data-toggle="popover" data-content="Error auto-locating. Please enter your location manually." data-trigger="manual" data-placement="auto right">Auto-Locate</button>
+                                    </span>
+                                </div>
+                            </div>
+                            <button type="submit" id="submit-button" class="btn btn-info btn-thin center-block" data-toggle="popover" data-content="Your location couldn't be found. Try auto-location or a postal code." data-trigger="manual" data-placement="auto bottom">Submit</button>
+                            <img src="assets/images/gps.svg" alt="auto-locate loading indicator" class="gps-svg">
+                        </form>
                     </div>
                 </div>
-                <div class="col-md-6 col-xs-12 pull-left">
-                    <div class="panel panel-info">
-                        <div class="panel-heading clearfix">
-                            <h3 class="your-news clearfix" id="source-name">Your News</h3>
-                        </div>
-                        <div class="panel-body article">
-                            <!-- <div class="article"></div> -->
+                <div class="container row">
+                    <div class="col-md-3 col-xs-12 pull-left">
+                        <div class="panel panel-info">
+                            <div class="panel-heading clearfix">
+                                <h3>Feeds</h3>
+                            </div>
+                            <div class="panel-body">
+                                <ul class="buttons list-style"></ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-3 col-xs-12 pull-right">
-                    <div class="panel panel-info">
-                        <div class="panel-heading clearfix">
-                            <h3 class="inline-heading md-pull-left">Weather</h3>
-                            <h6 class="inline-heading md-pull-right">Powered by Dark Sky</h6>
+                    <div class="col-md-6 col-xs-12 pull-left">
+                        <div class="panel panel-info">
+                            <div class="panel-heading clearfix">
+                                <h3 class="clearfix" id="source-name">Your News</h3>
+                            </div>
+                            <div class="panel-body article">
+                            </div>
                         </div>
-                        <div class="panel-body">
-                            <button id="weather-button" class="btn btn-info btn-thin" type="submit">Get Weather</button>
-                            <h4 id="weatherLocation"></h4>
-                            <h5 id="weather"></h5>
-                            <h5 id="weatherReport"></h5>
-                            <h5 id="precipitationReport"></h5>
-                            <canvas id="icon1" width="128" height="128" class="icon center-block"></canvas>
+                    </div>
+                    <div class="col-md-3 col-xs-12 pull-right">
+                        <div class="panel panel-info">
+                            <div class="panel-heading clearfix">
+                                <h3 class="inline-heading md-pull-left">Weather</h3>
+                                <h6 class="inline-heading md-pull-right">Powered by Dark Sky</h6>
+                            </div>
+                            <div class="panel-body">
+                                <button id="weather-button" class="btn btn-info btn-thin center-block" type="submit">Get Weather</button>
+                                <h4 id="weatherLocation"></h4>
+                                <h5 id="weather"></h5>
+                                <h5 id="weatherReport"></h5>
+                                <h5 id="precipitationReport"></h5>
+                                <canvas id="icon1" width="128" height="128" class="icon center-block"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>

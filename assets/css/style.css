@@ -1,7 +1,7 @@
 body {
 	/* Back-up color in case of image errors.*/
 	background-color: lightgray;
-	background-image: url("../images/background/old_wall.png");
+	background-image: url("../images/background/congruent_pentagon.png");
 	background-size: cover;
 	background-repeat: no-repeat;
 	height: 96vh;
@@ -17,6 +17,7 @@ body {
 
 .update-form {
 	width: 50%;
+	margin-bottom: 10px;
 }
 
 .login,
@@ -25,6 +26,15 @@ body {
 .update-form-container,
 .gps-svg {
 	display: none;
+}
+
+.welcome {
+	width: 100%;
+	margin: 0 auto;
+}
+
+.button-header {
+	clear: none;
 }
 
 .input-group {
@@ -43,7 +53,16 @@ body {
 
 .your-news {
 	width: 100%;
-	/*padding-left: 0;*/
+	margin-bottom: 10px;
+}
+
+.plain-link,
+.plain-link:link,
+.plain-link:visited,
+.plain-link:hover,
+.plain-link:active {
+	color: black;
+	text-decoration: none;
 }
 
 .linkSource {
@@ -66,23 +85,40 @@ body {
 
 .transparency-wrapper {
 	background-color: lightgray;
-    background-color: rgba(255, 255, 255, .85);
+    background-color: rgba(255, 255, 255, .6);
     border: 0 solid transparent;
     border-radius: 5px;
 	height: 100%;
 	padding: 1%;
 	width: 100%;
+	
+}
+
+.content {
+	height: 100%;
+	background-color: rgba(255, 255, 255, .15);
+	border: 0 solid transparent;
+    border-radius: 5px;
+	width: 100%;
+	padding-top: 1%;
 	overflow-y: auto;
 }
 
+p {
+	margin: 0;
+}
+
 .login-form {
+	min-width: 300px;
 	width: 33%;
+	clear: both;
 }
 
 .login {
 	justify-content: center;
-	align-items: center;	
-	height: 100%;
+	align-items: flex-start;
+	height: 70%;
+	margin: 0;
 	width: 100%;
 }
 
@@ -92,9 +128,12 @@ body {
 
 .inline-heading {
 	clear: none;
-	height: 100%;
 	margin: 0;
 	line-height: 28px;
+}
+
+h3 {
+	margin: 0;
 }
 
 .gps-svg {
@@ -106,6 +145,29 @@ body {
 	min-height: 200px;
 }
 
+.panel {
+	min-height: 400px;
+}
+
+.header {
+	margin-bottom: 20px;
+}
+
+.popover {
+	width: 180px;
+}
+
+h1 {
+	margin: 0;
+}
+
+.headline {
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+	height: 30%;
+}
+
 @media only screen and (min-width: 641px) {
 	.md-pull-right {
 		float: right;
@@ -114,6 +176,7 @@ body {
 		float: left;
 	}
 	.header {
+		display: flex;
 		padding: 0 15px;
 	}
 }
