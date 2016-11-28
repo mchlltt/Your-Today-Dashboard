@@ -114,8 +114,8 @@ $(document).ready(function () {
         }).done(function (data) {
             $('.article').empty();
             for (var i = 0; i < 3; i++) {
-                var row = $('<div class="row your-news">');
-                var column = $('<div class="col-xs-12">');
+                var row = $('<div class="row your-news center-block">');
+                var column = $('<div class="col-xs-12 center-block">');
                 var heading = $('<h3>').html(data.articles[i].title);
                 var description = $('<p>').html(data.articles[i].description);
                 var link = $('<a href="' + data.articles[i].url + '" target="blank"></a>').html('Read more');
