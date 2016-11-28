@@ -71,8 +71,11 @@ $(document).ready(function() {
         // Set background image to logged out default.
         $('body').css('background-image', 'url("assets/images/background/congruent_pentagon.png")');
 
-        // Make sure any welcome message content is erased.
+        // Make sure any welcome, weather, and news content is erased.
         $('#hello').empty();
+        $('.weather-details').empty();
+        $('#icon1').hide();
+        $('.article').empty();
     };
 
     // Reset variables. Some of this may already be true, but we want to be careful.
@@ -344,7 +347,7 @@ $(document).ready(function() {
             // If we don't have photoURL yet, get it.
             if (photoURL === undefined || photoURL.length === 0) {
                 // Fetch image by placeid.
-                var placeIDURL = "http://cors.io/?https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBsgQ07A5r52jQrex89eg_mSYCoQME2v1g";
+                var placeIDURL = "https://cors.io/?https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBsgQ07A5r52jQrex89eg_mSYCoQME2v1g";
                 $.getJSON({
                     url: placeIDURL,
                 }).done(
@@ -425,6 +428,7 @@ $(document).ready(function() {
             icon.toUpperCase();
             skycons.set('icon1', icon);
             skycons.play();
+            $('#icon1').show();
         });
 
         return false;
