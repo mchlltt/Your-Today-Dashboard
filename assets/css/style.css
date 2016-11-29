@@ -1,59 +1,173 @@
+/*
+Containing element styles
+*/
+
 body {
-	/* Back-up color in case of image errors.*/
-	background-color: lightgray;
-	background-image: url("../images/background/congruent_pentagon.png");
-	background-size: cover;
-	background-repeat: no-repeat;
-	height: 96vh;
-	margin: 2vh 1vw;
-	padding: 2vh 1vw;
-	width: 98vw;
+    background-color: lightgray;
+    background-image: url("../images/background/congruent_pentagon.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 96vh;
+    margin: 2vh 1vw;
+    padding: 2vh 1vw;
+    width: 98vw;
+}
+
+.transparency-wrapper {
+    background-color: lightgray;
+    background-color: rgba(255, 255, 255, .6);
+    border: 0 solid transparent;
+    border-radius: 5px;
+    height: 100%;
+    padding: 1%;
+    width: 100%;
+}
+
+.content {
+    height: 100%;
+    background-color: rgba(255, 255, 255, .15);
+    border: 0 solid transparent;
+    border-radius: 5px;
+    width: 100%;
+    padding-top: 1%;
+    overflow-y: auto;
+}
+
+.container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.panel-default,
+.panel-heading {
+    background: none;
+}
+
+.panel {
+    min-height: 400px;
+}
+
+.panel-heading {
+	display: flex;
+	align-items: center;
+}
+
+
+/*
+Common styles
+*/
+
+p,
+h1,
+h3 {
+    margin: 0;
+}
+
+.popover {
+    width: 180px;
 }
 
 .btn-thin {
-	margin-top: 5px;
-	padding: 0 15px;
+    margin-top: 5px;
+    padding: 0 15px;
 }
 
-.update-form {
-	width: 50%;
-	margin-bottom: 10px;
-}
+
+/*
+Default site view
+*/
 
 .logged-out,
 .logged-in,
 .welcome,
 .update-form-container,
-.gps-svg {
-	display: none;
+.gps-svg,
+.headline {
+    display: none;
 }
 
-.welcome {
-	width: 100%;
-	margin: 0 auto;
+
+/*
+Logged out site
+*/
+
+.headline {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 30%;
+}
+
+.login-form {
+    min-width: 300px;
+    width: 33%;
+    clear: both;
+}
+
+.login {
+    justify-content: center;
+    align-items: flex-start;
+    height: 70%;
+    margin: 0;
+    width: 100%;
+}
+
+
+/*
+Logged in site header styles
+*/
+
+.header {
+    margin-bottom: 20px;
 }
 
 .button-header {
-	clear: none;
+    clear: none;
+}
+
+.welcome {
+    width: 100%;
+    margin: 0 auto;
+}
+
+
+/*
+Update info form styles
+*/
+
+.update-form {
+    width: 50%;
+    margin-bottom: 10px;
 }
 
 .input-group {
-	width: 100%;
-	margin: 1% 0;
+    width: 100%;
+    margin: 1% 0;
 }
 
+.gps-svg {
+    clear: none;
+    margin: 0 auto;
+}
+
+
+/*
+News-related styles
+*/
+
 .list-style {
-	list-style: none;
-	padding-left: 0;
+    list-style: none;
+    padding-left: 0;
 }
 
 .well {
-	align-items: stretch;
+    align-items: stretch;
 }
 
 .your-news {
-	width: 100%;
-	margin-bottom: 10px;
+    width: 100%;
+    margin-bottom: 10px;
 }
 
 .plain-link,
@@ -61,147 +175,111 @@ body {
 .plain-link:visited,
 .plain-link:hover,
 .plain-link:active {
-	color: black;
-	text-decoration: none;
+    color: black;
+    text-decoration: none;
 }
 
 .linkSource {
-	margin: 15px auto;
+    margin: 15px auto;
 }
 
 .btnSource {
-	margin: 0 5px;
-}
-
-.icon {
-	padding-top: 15px;
-}
-
-.container {
-	width: 100%;
-	margin: 0;
-	padding: 0;
-}
-
-.transparency-wrapper {
-	background-color: lightgray;
-    background-color: rgba(255, 255, 255, .6);
-    border: 0 solid transparent;
-    border-radius: 5px;
-	height: 100%;
-	padding: 1%;
-	width: 100%;
-	
-}
-
-.content {
-	height: 100%;
-	background-color: rgba(255, 255, 255, .15);
-	border: 0 solid transparent;
-    border-radius: 5px;
-	width: 100%;
-	padding-top: 1%;
-	overflow-y: auto;
-}
-
-p {
-	margin: 0;
-}
-
-.login-form {
-	min-width: 300px;
-	width: 33%;
-	clear: both;
-}
-
-.login {
-	justify-content: center;
-	align-items: flex-start;
-	height: 70%;
-	margin: 0;
-	width: 100%;
-}
-
-.panel-default, .panel-heading {
-	background: none;
-}
-
-.inline-heading {
-	clear: none;
-	margin: 0;
-	line-height: 28px;
-}
-
-h3 {
-	margin: 0;
-}
-
-.gps-svg {
-	clear: none;
-	margin: 0 auto;
+    margin: 0 5px;
 }
 
 .article {
-	min-height: 200px;
+    min-height: 250px;
 }
 
-.panel {
-	min-height: 400px;
+
+/*
+Weather-related styles
+*/
+
+.inline-heading {
+    display: inline-block;
+    clear: none;
 }
 
-.header {
-	margin-bottom: 20px;
+.weather-heading {
+	justify-content: space-between;
 }
 
-.popover {
-	width: 180px;
+.weather-heading-left {
+	width: 60%;
+	text-align: left;
 }
 
-h1 {
+.weather-heading-right {
+	width: 40%;
+	text-align: right;
 	margin: 0;
 }
 
-.headline {
-	display: flex;
-	justify-content: center;
-	align-items: flex-end;
-	height: 30%;
+.icon {
+    padding-top: 15px;
 }
+
+/*
+Media queries
+*/
+
+
+/* 
+Sizes above 640px
+*/
 
 @media only screen and (min-width: 641px) {
-	.md-pull-right {
-		float: right;
-	}
-	.md-pull-left {
-		float: left;
-	}
-	.header {
-		display: flex;
-		padding: 0 15px;
-	}
+    .md-pull-right {
+        float: right;
+    }
+    .md-pull-left {
+        float: left;
+    }
+    .header {
+        display: flex;
+        padding: 0 15px;
+    }
 }
 
+
+/*
+Sizes at or below 640px
+*/
+
 @media only screen and (max-width: 640px) {
-	.inline-heading {
-		clear: both;
-		margin: 0 auto;
+    .inline-heading {
+        clear: both;
+        display: block;
+        float: none;
+        margin: 0 auto;
+        text-align: center;
+        width: auto;
+    }
+    .button-header {
+        clear: both;
+        display: block;
+        float: none;
+        margin: 1% auto;
+    }
+    .panel-body button {
+        display: block;
+        margin: 0 auto;
+    }
+
+	.panel-heading {
 		display: block;
-		text-align: center;
-		float: none;
 	}
 
-	.button-header {
-		clear: both;
-		margin: 1% auto;
-		float: none;
-		display: block;
-	}
-	.panel-body button {
-		margin: 0 auto;
-		display: block;
-	}
-
-	h4 {
-		text-align: center;
-	}
+    h4 {
+        text-align: center;
+    }
+    label {
+        display: block;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .update-form {
+        width: 100%;
+    }
 }

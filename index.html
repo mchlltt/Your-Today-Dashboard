@@ -25,10 +25,10 @@
             <div class="row center-block login logged-out">
                 <div class="col-xs-12 login-form center-block">
                     <form>
-                        <label for="email">Email</label>
-                        <input id="email" type="email" placeholder="Email" class="form-control">
+                        <label for="email">Email Address</label>
+                        <input id="email" type="email" placeholder="Email Address" class="form-control">
                         <label for="password">Password</label>
-                        <input id="password" type="Password" placeholder="password" class="form-control">
+                        <input id="password" type="Password" placeholder="Password" class="form-control">
                         <button id="login-button" class="btn btn-action btn-thin btn-info center-block" data-toggle="popover" data-content="Error logging in. Please check your username and password and try again." data-trigger="manual" data-placement="auto bottom">Log In</button>
                     </form>
                 </div>
@@ -51,7 +51,7 @@
                                 <div class="input-group">
                                     <input type="text" id="location" class="form-control pull-left change-input">
                                     <span class="input-group-btn">
-                                        <button id="auto-locate" class="btn btn-info" data-toggle="popover" data-content="Error auto-locating. Please enter your location manually." data-trigger="manual" data-placement="auto right">Auto-Locate</button>
+                                        <button id="auto-locate" class="btn btn-info auto-loc" data-toggle="popover" data-content="Error auto-locating. Please enter your location manually." data-trigger="manual" data-placement="auto right">Auto-Locate</button>
                                     </span>
                                 </div>
                             </div>
@@ -82,9 +82,9 @@
                     </div>
                     <div class="col-md-3 col-xs-12 pull-right">
                         <div class="panel panel-info">
-                            <div class="panel-heading clearfix">
-                                <h3 class="inline-heading md-pull-left">Weather</h3>
-                                <h6 class="inline-heading md-pull-right">Powered by Dark Sky</h6>
+                            <div class="panel-heading weather-heading clearfix">
+                                <h3 class="inline-heading weather-heading-left">Weather</h3>
+                                <h6 class="inline-heading weather-heading-right">Powered by Dark Sky</h6>
                             </div>
                             <div class="panel-body">
                                 <button id="weather-button" class="btn btn-info btn-thin center-block" type="submit">Get Weather</button>
