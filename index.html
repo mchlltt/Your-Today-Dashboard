@@ -3,15 +3,25 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-OvY8uwgdrNLTUgJ1VoTpyowRQ3o75LU&libraries=places"></script>
+    <title>Your Today Dashboard</title>
+    <!-- Bootstrap CSS CDN -->
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet">
+    <!-- Personal CSS -->
     <link href="assets/css/style.css" rel="stylesheet">
+    <!-- Favicon -->
+    <link href="assets/images/favicon.png" rel="icon">
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <!-- Bootstrap.js CDN -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- Google Maps API CDN -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-OvY8uwgdrNLTUgJ1VoTpyowRQ3o75LU&libraries=places"></script>
+    <!-- Firebase.js CDN -->
     <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+    <!-- SkyCons.js CDN -->
     <script src="https://rawgithub.com/darkskyapp/skycons/master/skycons.js"></script>
+    <!-- Personal JS for overall user experience and news API interaction. -->
     <script src="assets/javascript/user.js"></script>
     <script src="assets/javascript/news.js"></script>
 </head>
@@ -20,7 +30,7 @@
     <div class="transparency-wrapper">
         <div class="content">
             <div class="headline logged-out text-center">
-                    <h1>Your Today Dashboard</h1>
+                <h1>Your Today Dashboard</h1>
             </div>
             <div class="row center-block login logged-out">
                 <div class="col-xs-12 login-form center-block">
@@ -55,7 +65,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <button type="submit" id="submit-button" class="btn btn-info btn-thin center-block" data-toggle="popover" data-content="Your location couldn't be found. Try auto-location or a postal code." data-trigger="manual" data-placement="auto bottom">Submit</button>
+                            <button type="submit" id="submit-button" class="btn btn-info btn-thin center-block" data-toggle="popover" data-content="Your location couldn't be found. Please try auto-location or a postal code." data-trigger="manual" data-placement="auto bottom">Submit</button>
                             <img src="assets/images/gps.svg" alt="auto-locate loading indicator" class="gps-svg">
                         </form>
                     </div>

@@ -81,6 +81,7 @@ Default site view
 .logged-out,
 .logged-in,
 .welcome,
+.change,
 .update-form-container,
 .gps-svg,
 .headline {
@@ -127,7 +128,7 @@ Logged in site header styles
 }
 
 .welcome {
-    width: 100%;
+	width: 100%;
     margin: 0 auto;
 }
 

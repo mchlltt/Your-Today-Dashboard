@@ -18,6 +18,7 @@ $(document).ready(function() {
     var users = database.ref('users');
     var displayNames = database.ref('displayNames');
     var locations = database.ref('locations');
+    var photos = database.ref('photos');
 
     // Assign authentication tools to variables.
     var auth = firebase.auth();
@@ -32,6 +33,8 @@ $(document).ready(function() {
     var location;
     var lat;
     var long;
+    var placeID;
+    var backgroundPlaceID;
     var photoURL;
     var vicinity;
     var errorTimeout;
@@ -86,32 +89,14 @@ $(document).ready(function() {
         email = '';
         password = '';
         name = '';
-        displayName = '';
+        displayName = undefined;
+        placeID = '';
+        backgroundPlaceID = '';
         photoURL = '';
-        location = '';
+        location = undefined;
+        vicinity = '';
         lat = '';
         long = '';
-    };
-
-    // What to do when the user is or becomes authenticated.
-    afterLogIn = function(firebaseUser) {
-        // Hide the login section.
-        $('.logged-out').hide();
-        // Show the logged in site.
-        $('.logged-in').show();
-
-        // Clear out any email/password values.
-        // We do this here instead of after login-button click
-        // because we do not want to delete their info if the login fails.
-        $('#email').val('');
-        $('#password').val('');
-
-        // name is a temporary workaround for username, because an email address cannot be a variable name in Firebase.
-        // This wouldn't work in a scaled application, but with our set-up, it does.
-        name = firebaseUser.email.split('@')[0];
-
-        // Check whether we need displayName and location from the user.
-        $.when(isUserInfoNeeded()).done(showForm);
     };
 
     // On login-button click.
@@ -148,53 +133,9 @@ $(document).ready(function() {
         // Don't refresh.
         return false;
     });
-    // <---- Authentication
 
 
-    // Page Element Logic ----->
-
-    // Check whether we need displayName or location.
-    isUserInfoNeeded = function() {
-
-        // Check if a display name is already known for this email.
-        displayNames.child(name).once('value', function(snapshot) {
-            // If so, set the value of the displayName input to the displayName.
-            if (snapshot.exists()) {
-                displayName = snapshot.val().displayName;
-                $('#displayName').val(displayName);
-                setDisplayName(snapshot);
-            }
-        });
-
-        // Check if a location is already known for this email.
-        return locations.child(name).once('value', function(snapshot) {
-            // If so, set the value of the location input to the location.
-            if (snapshot.exists()) {
-                lat = snapshot.val().lat;
-                long = snapshot.val().long;
-                location = snapshot.val().location;
-                locationName = snapshot.val().locationName;
-                placeID = snapshot.val().placeID;
-                photoURL = snapshot.val().photoURL;
-                $('#location').val(location);
-                setBackground(snapshot);
-            }
-        });
-    };
-
-    // If we found that we have a display name and location already, hide the form.
-    showForm = function() {
-        if (displayName.length === 0 || location.length === 0) {
-            $('.update-form-container').show();
-        } else {
-            $('.welcome').css('display', 'inline-block');
-            $('.change').show();
-        }
-
-        startListening();
-    };
-
-
+    // Listener for the button that allows a user to change their name or location.
     $('#change-button').on('click', function() {
         $('.update-form-container').show();
         $('.welcome').hide();
@@ -243,16 +184,7 @@ $(document).ready(function() {
     };
     // <----- Auto-Location
 
-
-    // If the user hits enter in the change info form, submit the form instead of autolocating.
-    $('.change-input').on('keypress', function(e) {
-        if (e.which === 13) {
-            submitForm();
-            return false;
-        }
-    });
-
-
+    // User form submission ------->
     submitForm = function() {
         // Get contents of displayName input.
         displayName = $('#displayName').val();
@@ -319,100 +251,179 @@ $(document).ready(function() {
         return false;
     };
 
-    // When the form is submitted with the display name and location,
+    // Submit the form by clicking submit,
     $('#submit-button').on('click', submitForm);
 
-    // Attach event handlers once we know `name`.
-    startListening = function() {
-        // Listen for displayName initial value and changes.
-        displayNames.child(name).on('value', function(snapshot) {
-            setDisplayName(snapshot);
-        });
+    // or by hitting enter in any input. This avoids enter triggering auto-location.
+    $('.change-input').on('keypress', function(e) {
+        if (e.which === 13) {
+            submitForm();
+            return false;
+        }
+    });
+    // <----- User form submission.
 
-        // Listen for location initial value and changes.
-        locations.child(name).on('value', function() {
-            setBackground();
-        });
-    };
-
-    setDisplayName = function(snapshot) {
-        if (displayName !== undefined && displayName.length !== 0) {
-            $('#hello').text('Hello ' + snapshot.val().displayName + '!');
+    showForm = function() {
+        if (displayName !== undefined && location !== undefined) {
+            if (displayName.length === 0 || location.length === 0) {
+                $('.update-form-container').show();
+            }
+        } else {
+            $('.welcome').css('display', 'inline-block');
+            $('.change').show();
         }
     };
 
-    // Background image ---->
-    setBackground = function() {
-        // If location is defined and length > 0, this means that placeID has been captured.
-        if (location !== undefined && location.length > 0) {
-            // If we don't have photoURL yet, get it.
-            if (photoURL === undefined || photoURL.length === 0) {
-                // Fetch image by placeid.
-                var placeIDURL = "https://crossorigin.me/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBsgQ07A5r52jQrex89eg_mSYCoQME2v1g";
-                $.getJSON({
-                    url: placeIDURL,
-                }).done(
-                    function(response) {
-                        // If you get a response in which the photos array isn't empty, set the background image's src to the URL on the first image.
-                        if (response.result.photos !== undefined) {
-                            var reference = response.result.photos[0].photo_reference;
-                            newPhotoURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=1600&photoreference=" + reference + "&key=AIzaSyBYWYrtTu9U0zgCOTpVKL_WyLsaB365exk";
-                            // Check whether the URL has actually changed. If not, we don't want to reset it or it will flash as it reloads.
-                            // There also isn't any reason to write to Firebase if nothing has changed.
-                            if (newPhotoURL !== photoURL) {
-                                photoURL = newPhotoURL;
-                                $('body').css('background-image', 'url(' + photoURL + ')');
-                                var newPhotoURLObj = {};
-                                newPhotoURLObj[name] = {
-                                    location: location,
-                                    locationName: locationName,
-                                    placeID: placeID,
-                                    lat: lat,
-                                    long: long,
-                                    photoURL: photoURL
-                                };
-                                locations.update(newPhotoURLObj);
-                            }
-                        } else {
-                            // Otherwise, we're going to look for a more broad location.
-                            // Make sure the vicinity is in the response and length > 0.
-                            // Also, make sure it's not the same vicinity we just checked.
-                            // Between these two things, we avoid infinite loops.
-                            if (response.result.vicinity !== undefined && response.result.vicinity.length > 0) {
-                                if (response.result.vicinity !== vicinity) {
-                                    vicinity = response.result.vicinity;
-                                    var geocoderVicinity = new google.maps.Geocoder();
-                                    geocoderVicinity.geocode({
-                                        'address': vicinity
-                                    }, function(results, status) {
-                                        // If geocoding was successful,
-                                        if (status == google.maps.GeocoderStatus.OK) {
-                                            // Save placeID locally and to Firebase.
-                                            placeID = results[0].place_id;
-                                            var newPlaceIDObj = {};
-                                            newPlaceIDObj[name] = {
-                                                location: location,
-                                                locationName: locationName,
-                                                placeID: placeID,
-                                                lat: lat,
-                                                long: long
-                                            };
-                                            locations.update(newPlaceIDObj);
-                                        }
-                                    });
-                                }
-                            }
-                        }
-                    }
-                );
-            } else {
-                // If we already photoURL from Firebase, just use that.
-                $('body').css('background-image', 'url(' + photoURL + ')');
+
+    // What to do when the user is or becomes authenticated.
+    afterLogIn = function(firebaseUser) {
+        // Hide the login section.
+        $('.logged-out').hide();
+        // Show the logged in site.
+        $('.logged-in').show();
+
+        // Clear out any email/password values.
+        // We do this here instead of after login-button click
+        // because we do not want to delete their info if the login fails.
+        $('#email').val('');
+        $('#password').val('');
+
+        // name is a temporary workaround for username, because an email address cannot be a variable name in Firebase.
+        // This wouldn't work in a scaled application, but with our set-up, it does.
+        name = firebaseUser.email.split('@')[0];
+
+        // Check whether we need displayName and location from the user.
+        $.when(checkData()).done(showForm);
+    };
+
+    // <---- Authentication
+
+
+    // Page Element Logic ----->
+
+    // Attach event handlers once we know `name`.
+    checkData = function() {
+        // Listen for displayName initial value and changes.
+        displayNames.child(name).on('value', function(snapshot) {
+            if (snapshot.exists()) {
+                displayName = snapshot.val().displayName;
+                // Set local display name variables when we get them.
+                showDisplayName(snapshot.val().displayName);
+            }
+        });
+
+        // Listen for photo initial value and changes.
+        photos.child(name).on('value', function(snapshot) {
+            if (snapshot.exists()) {
+                photoURL = snapshot.val().photoURL;
+                backgroundPlaceID = snapshot.val().placeID;
+                showBackground();
+            }
+        });
+
+        // Listen for location initial value and changes.
+        locations.child(name).on('value', function(snapshot) {
+            if (snapshot.exists()) {
+                // Set local location variables when we get them.
+                // This isn't necessarily shown anywhere except that 
+                // we should check now whether we need to find a background image.
+                lat = snapshot.val().lat;
+                long = snapshot.val().long;
+                location = snapshot.val().location;
+                locationName = snapshot.val().locationName;
+                placeID = snapshot.val().placeID;
+                $('#location').val(location);
+                backgroundCheck();
+            }
+        });
+
+        return displayName;
+    };
+
+    // Check whether we need to find a background image.
+    backgroundCheck = function() {
+        if (placeID.length > 0) {
+            if (isBackgroundImageNeeded()) {
+                findBackground(placeID);
             }
         }
     };
 
-    // <---- Background image.
+    // To decide whether we need to find a new background image,
+    isBackgroundImageNeeded = function() {
+        // First check whether we have a backgroundPlaceID. If we don't, we need to find an image.
+        if (backgroundPlaceID === undefined || backgroundPlaceID.length === 0) {
+            return true;
+            // If we have a backgroundPlaceID, check whether it's the same as our placeID. If isn't, we need to find a new image.
+        } else if (placeID !== backgroundPlaceID) {
+            return true;
+            // Otherwise, we are set and don't need to find a new image.
+        } else {
+            return false;
+        }
+    };
+
+    // Change the places that display name is shown.
+    showDisplayName = function(displayName) {
+        if (displayName.length > 0) {
+            $('#displayName').val(displayName);
+            $('#hello').text('Hello ' + displayName + '!');
+        }
+    };
+
+    // Change the background image.
+    showBackground = function() {
+        if (photoURL.length > 0) {
+            $('body').css('background-image', 'url(' + photoURL + ')');
+        }
+    };
+
+
+    // Find a background image based on placeID.
+    findBackground = function(placeID) {
+        // Get Place Details, which may include a photos array.
+        var placeIDURL = "https://crossorigin.me/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBsgQ07A5r52jQrex89eg_mSYCoQME2v1g";
+        $.getJSON({
+            url: placeIDURL,
+        }).done(function(response) {
+            // If you get a response in which the photos array isn't empty, send the place ID and URL on the first image to Firebase.
+            // This database update will trigger the local changes.
+            if (response.result.photos !== undefined) {
+                var reference = response.result.photos[0].photo_reference;
+                photoURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=1600&photoreference=" + reference + "&key=AIzaSyBYWYrtTu9U0zgCOTpVKL_WyLsaB365exk";
+                var newPhotoURLObj = {};
+                newPhotoURLObj[name] = {
+                    photoURL: photoURL,
+                    placeID: placeID
+                };
+                photos.update(newPhotoURLObj);
+                // But, if we didn't get any photos, check if we can't get around that.
+            } else {
+                // Did the response have a 'vicinity' value?
+                if (response.result.vicinity !== undefined && response.result.vicinity.length > 0) {
+                    // And, if so, is it the same vicinity variable we just tried?
+                    if (response.result.vicinity !== vicinity) {
+                        // If it had a value that we haven't already tried, set vicinity.
+                        vicinity = response.result.vicinity;
+                        // Geocode vicinity.
+                        var geocoderVicinity = new google.maps.Geocoder();
+                        geocoderVicinity.geocode({
+                            'address': vicinity
+                        }, function(results, status) {
+                            // If geocoding was successful,
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                // Save new placeID locally then repeat this.
+                                placeID = results[0].place_id;
+                                findBackground(placeID);
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    };
+
+
 
 
     // Fetch weather ---->
@@ -433,7 +444,6 @@ $(document).ready(function() {
         });
 
         return false;
-
     });
     // <---- Fetch weather.
 
