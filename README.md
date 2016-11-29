@@ -7,7 +7,7 @@ A dashboard application serving what you need to know today.
 - News from 24 different news sources via News API
 - Geocoding and photos via Google's Geocoding and Places APIs
 
-### Try it out on Heroku at https://secure-escarpment-49771.herokuapp.com/.
+### Try it out on Heroku at https://your-today-dashboard.herokuapp.com/.
 
 ### Demo user account:
 - Email Address: `example@gmail.com`
