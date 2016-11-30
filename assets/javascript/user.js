@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    // Firebase Set-Up ---->
+    // Firebase set-up ---->
     // Configure and initialize Firebase.
     var config = {
         apiKey: "AIzaSyDCO42TtlK2h-MzIpVt1qGGQR-AmpwQVS0",
@@ -22,7 +22,7 @@ $(document).ready(function() {
 
     // Assign authentication tools to variables.
     var auth = firebase.auth();
-    // <---- Firebase Set-Up
+    // <---- Firebase set-up
 
 
     // Initialize variables --->
@@ -36,7 +36,7 @@ $(document).ready(function() {
     var placeID;
     var backgroundPlaceID;
     var photoURL;
-    var vicinity;
+    var vicinity = '';
     var errorTimeout;
     var skycons = new Skycons({
         "color": "orange"
@@ -59,6 +59,27 @@ $(document).ready(function() {
             clearUserData();
         }
     });
+
+    // What to do when the user is or becomes authenticated.
+    afterLogIn = function(firebaseUser) {
+        // Hide the login section.
+        $('.logged-out').hide();
+        // Show the logged in site.
+        $('.logged-in').show();
+
+        // Clear out any email/password values.
+        // We do this here instead of after login-button click
+        // because we do not want to delete their info if the login fails.
+        $('#email').val('');
+        $('#password').val('');
+
+        // name is a temporary workaround for username, because an email address cannot be a variable name in Firebase.
+        // This wouldn't work in a scaled application, but with our set-up, it does.
+        name = firebaseUser.email.split('@')[0];
+
+        // Check whether we need displayName and location from the user.
+        $.when(checkData()).done(showForm);
+    };
 
     // Show the user the logged out version of the site.
     showLoggedOutSite = function() {
@@ -125,7 +146,6 @@ $(document).ready(function() {
         return false;
     });
 
-
     // On logout-button click.
     $('#logout-button').on('click', function() {
         // Sign out. The auth listener will handle the rest.
@@ -134,14 +154,7 @@ $(document).ready(function() {
         // Don't refresh.
         return false;
     });
-
-
-    // Listener for the button that allows a user to change their name or location.
-    $('#change-button').on('click', function() {
-        $('.update-form-container').show();
-        $('.welcome').hide();
-        $('.change').hide();
-    });
+    // <---- Authentication
 
 
     // Auto-Location ---->
@@ -185,7 +198,9 @@ $(document).ready(function() {
     };
     // <----- Auto-Location
 
+
     // User form submission ------->
+    // Sumbit user name and location.
     submitForm = function() {
         // Get contents of displayName input.
         displayName = $('#displayName').val();
@@ -238,6 +253,8 @@ $(document).ready(function() {
                     $('.update-form-container').hide();
                     $('.welcome').show();
                     $('.change').show();
+                    // Reset vicinity variable.
+                    vicinity = '';
 
                 } else {
                     $('#submit-button').popover('toggle');
@@ -264,6 +281,9 @@ $(document).ready(function() {
     });
     // <----- User form submission.
 
+
+    // Page element logic ----->
+    // Shows the form for changing a user's name or location.
     showForm = function() {
         if (displayName !== undefined && location !== undefined) {
             if (displayName.length === 0 || location.length === 0) {
@@ -275,32 +295,12 @@ $(document).ready(function() {
         }
     };
 
-
-    // What to do when the user is or becomes authenticated.
-    afterLogIn = function(firebaseUser) {
-        // Hide the login section.
-        $('.logged-out').hide();
-        // Show the logged in site.
-        $('.logged-in').show();
-
-        // Clear out any email/password values.
-        // We do this here instead of after login-button click
-        // because we do not want to delete their info if the login fails.
-        $('#email').val('');
-        $('#password').val('');
-
-        // name is a temporary workaround for username, because an email address cannot be a variable name in Firebase.
-        // This wouldn't work in a scaled application, but with our set-up, it does.
-        name = firebaseUser.email.split('@')[0];
-
-        // Check whether we need displayName and location from the user.
-        $.when(checkData()).done(showForm);
-    };
-
-    // <---- Authentication
-
-
-    // Page Element Logic ----->
+    // Listener for the button opens this form.
+    $('#change-button').on('click', function() {
+        $('.update-form-container').show();
+        $('.welcome').hide();
+        $('.change').hide();
+    });
 
     // Attach event handlers once we know `name`.
     checkData = function() {
@@ -318,7 +318,7 @@ $(document).ready(function() {
             if (snapshot.exists()) {
                 photoURL = snapshot.val().photoURL;
                 backgroundPlaceID = snapshot.val().placeID;
-                showBackground();
+                showBackground(photoURL);
             }
         });
 
@@ -373,12 +373,11 @@ $(document).ready(function() {
     };
 
     // Change the background image.
-    showBackground = function() {
+    showBackground = function(photoURL) {
         if (photoURL.length > 0) {
             $('body').css('background-image', 'url(' + photoURL + ')');
         }
     };
-
 
     // Find a background image based on placeID.
     findBackground = function(placeID) {
@@ -423,11 +422,10 @@ $(document).ready(function() {
             }
         });
     };
+    // <---- Page element logic
 
 
-
-
-    // Fetch weather ---->
+    // Fetch and display weather ---->
     $('#weather-button').on('click', function() {
         var apiKey = '0b3cbdf73e99584a55eddd1b6bd851f6';
         var url = 'https://api.forecast.io/forecast/';
@@ -446,6 +444,6 @@ $(document).ready(function() {
 
         return false;
     });
-    // <---- Fetch weather.
+    // <---- Fetch and display weather
 
 });
