@@ -432,7 +432,7 @@ $(document).ready(function() {
 
         $.getJSON(url + apiKey + "/" + lat + "," + long + "?callback=?", function(data) {
             $('#weatherLocation').text('The weather for ' + locationName);
-            $('#weather').text('Current temperature: ' + data.currently.temperature + ' °F');
+            $('#weather').text('Current temperature: ' + data.currently.temperature.toFixed(1) + ' °F');
             $('#weatherReport').text('Next Hour: ' + data.currently.summary);
             $('#precipitationReport').text('Chance of precipitation in the next hour: ' + Math.round(data.currently.precipProbability * 100) + '%');
             var icon = data.currently.icon;
