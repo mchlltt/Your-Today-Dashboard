@@ -1,14 +1,17 @@
 # Your Today Dashboard
 A dashboard application serving what you need to know today.
 
-## Features:
+## Features
 - Authentication and database via Firebase
 - Weather via Dark Sky API
 - News from 24 different news sources via News API
 - Geocoding and photos via Google's Geocoding and Places APIs
 
 ## Screenshots
-Coming soon!
+#### The site when a user is not logged in.
+![Screenshot of the application when logged out](https://github.com/mchlltt/Your-Today-Dashboard/blob/master/assets/images/Screenshots/Logged-Out.png?raw=true)
+#### The site when a user is logged in and has requested weather and news.
+![Screenshot of the application when logged in](https://github.com/mchlltt/Your-Today-Dashboard/blob/master/assets/images/Screenshots/Logged-In.png?raw=true)
 
 ## Getting started
 To view the application as deployed on Heroku, you can visit
