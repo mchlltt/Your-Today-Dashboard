@@ -14,19 +14,15 @@ A dashboard application serving what you need to know today.
 ![Screenshot of the application when logged in](https://github.com/mchlltt/Your-Today-Dashboard/blob/master/assets/images/Screenshots/Logged-In.png?raw=true)
 
 ## Getting started
-To view the application as deployed on Heroku, you can visit
-
-https://your-today-dashboard.herokuapp.com/.
+To view the application deployed on Heroku, visit https://your-today-dashboard.herokuapp.com/.
 
 If you prefer to run the application locally,
 
-1. Open a Terminal or Command Prompt instance.
-2. Run `git clone https://github.com/mchlltt/Your-Today-Dashboard.git/`
+1. Open a Terminal or Command Prompt window, then run
+2. `git clone https://github.com/mchlltt/Your-Today-Dashboard.git/`
 3. Open `index.html` in your Javascript-enabled web browser of choice.
 
 ## Demo user account
-This account is usable both on Heroku and a local instance of the application.
-
 - Email Address: `example@gmail.com`
 - Password: `password`
 
