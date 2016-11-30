@@ -69,6 +69,7 @@ $(document).ready(function() {
 
         // Make sure the login box is showing.
         $('.login').css('display', 'flex');
+        $('.headline').css('display', 'flex');
         $('.logged-out').show();
 
         // Set background image to logged out default.

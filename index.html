@@ -27,11 +27,15 @@
 </head>
 
 <body>
+    <!-- Wrapper for main transparent box -->
     <div class="transparency-wrapper">
+    <!-- Wrapper for inner transparent box -->
         <div class="content">
+            <!-- App title -->
             <div class="headline logged-out text-center">
                 <h1>Your Today Dashboard</h1>
             </div>
+            <!-- Log In Box -->
             <div class="row center-block login logged-out">
                 <div class="col-xs-12 login-form center-block">
                     <form>
@@ -44,11 +48,13 @@
                 </div>
             </div>
             <div class="logged-in">
+            <!-- Header with Log Out, name, and Change button -->
                 <div class="row center-block header">
                     <button id="logout-button" class="btn btn-thin btn-info md-pull-left button-header">Log Out</button>
                     <h2 id="hello" class="text-center welcome button-header"></h2>
                     <button id="change-button" class="btn btn-thin btn-info md-pull-right button-header change">Change name or location</button>
                 </div>
+                <!-- Form for updating display name and location. -->
                 <div class="container row center-block update-form-container">
                     <div class="col-xs-12">
                         <form class="center-block update-form">
@@ -71,6 +77,7 @@
                     </div>
                 </div>
                 <div class="container row">
+                    <!-- Holds list of news sources -->
                     <div class="col-md-3 col-xs-12 pull-left">
                         <div class="panel panel-info">
                             <div class="panel-heading clearfix">
@@ -81,6 +88,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Holds news articles -->
                     <div class="col-md-6 col-xs-12 pull-left">
                         <div class="panel panel-info">
                             <div class="panel-heading clearfix">
@@ -90,6 +98,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Holds weather info. -->
                     <div class="col-md-3 col-xs-12 pull-right">
                         <div class="panel panel-info">
                             <div class="panel-heading weather-heading clearfix">

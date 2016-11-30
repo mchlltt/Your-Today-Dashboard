@@ -45,7 +45,7 @@ body {
 }
 
 .panel {
-    min-height: 400px;
+    min-height: 450px;
 }
 
 .panel-heading {
@@ -83,8 +83,7 @@ Default site view
 .welcome,
 .change,
 .update-form-container,
-.gps-svg,
-.headline {
+.gps-svg {
     display: none;
 }
 
@@ -94,7 +93,6 @@ Logged out site
 */
 
 .headline {
-    display: flex;
     justify-content: center;
     align-items: flex-end;
     height: 30%;
@@ -230,7 +228,7 @@ Media queries
 Sizes above 640px
 */
 
-@media only screen and (min-width: 641px) {
+@media only screen and (min-width: 640px) {
     .md-pull-right {
         float: right;
     }
@@ -241,14 +239,17 @@ Sizes above 640px
         display: flex;
         padding: 0 15px;
     }
+    .change {
+        display: inline-block;
+    }
 }
 
 
 /*
-Sizes at or below 640px
+Sizes below 640px
 */
 
-@media only screen and (max-width: 640px) {
+@media only screen and (max-width: 639.999px) {
     .inline-heading {
         clear: both;
         display: block;

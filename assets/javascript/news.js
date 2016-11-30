@@ -78,17 +78,18 @@ $(document).ready(function () {
     // Make buttons on pageload.
     makeNewsSourceButtons();
 
-    // Generate news sources on the left column
+    // Generate news source buttons in the left column
     function makeNewsSourceButtons() {
         for (var i = 0; i < news.length; i++) {
-            var b = $('<div>').addClass('linkSource');
-            var a = $('<a>').attr({
+            var div = $('<div>').addClass('linkSource');
+            var link = $('<a>').attr({
                 'class': 'btnSource',
-                'data-index': i
+                'data-index': i,
+                'role': 'button'
             });
-            a.html(news[i].source);
-            b.append(a);
-            $('.buttons').append(b);
+            link.html(news[i].source);
+            div.append(link);
+            $('.buttons').append(div);
         }
     }
 
