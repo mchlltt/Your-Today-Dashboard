@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) [2016] [Mich Elliott, Chris Leong, Peter Tountas]
+Copyright (c) 2016 Mich Elliott, Chris Leong, Peter Tountas
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
